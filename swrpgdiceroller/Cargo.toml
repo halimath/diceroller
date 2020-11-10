@@ -1,0 +1,11 @@
+[package]
+name = "swrpgdiceroller"
+version = "0.2.0"
+authors = ["Alexander Metzner <alexander.metzner@gmail.com"]
+edition = "2018"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+rand = "0.7.3"
