@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>DiceRoller</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <style>
+    body {
+      display: flex;
+      min-height: 100vh;
+      flex-direction: column;
+    }
+
+    main {
+      flex: 1 0 auto;
+    }
+
+    .m-r2 {
+      margin-right: 0.6em;
+    }
+
+    .result {
+      font-size: 2em;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body id="app">
+  <noscript>This page contains webassembly and javascript content, please enable javascript in your browser.</noscript>
+
+  <script>
+    window.SharingWrapper = {
+      canShare() {
+        return typeof(navigator.share) === "function";
+      },
+
+      async shareText(text) {
+        console.log("Sharing", text);
+        if (!this.canShare()) {
+          return Promise.reject("sharing is not supported");          
+        }
+
+        return navigator.share({
+          text: text,
+        });
+      }
+    };
+  </script>
+
+  <script type="module">
+    import init, { start } from '../pkg/diceroller_app.js';
+
+    (async () => {
+      await init();
+      start();
+    })();
+  </script>
+</body>
+
+</html>
