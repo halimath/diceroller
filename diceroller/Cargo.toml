@@ -1,5 +1,5 @@
 [package]
-name = "swrpgdiceroller"
+name = "diceroller"
 version = "0.2.0"
 authors = ["Alexander Metzner <alexander.metzner@gmail.com"]
 edition = "2018"
