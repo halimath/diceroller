@@ -1,23 +1,21 @@
 # diceroller
 
-A library/web-app for rolling dice of the 
+A rust library and web-app for rolling dice of the 
 [SW role playing game series](https://www.fantasyflightgames.com/en/starwarsrpg/).
 
-## I just want to use the web app
-[diceroller.wilanthaou.de](http://diceroller.wilanthaou.de/)
+The app is online available at 
+[https://diceroller.wilanthaou.de/](https://diceroller.wilanthaou.de/).
 
-## I'm a develolper
+## Development
 
-This project has been implemented using the following technologies:
+This project is both a convenient utility for online role playing sessions as well as
+an evaluation of the following technologies and their interaction:
 
-* [Rust](https://www.rust-lang.org/) is used as the programming language. The core 
-  library providing the different dice type, symbols and aggregation logic can be used
-  for any rust project (a demo CLI is provided). The library is also used as part of an
-  [WASM](https://webassembly.org/) single page application
+* [Rust](https://www.rust-lang.org/)
+* [WASM](https://webassembly.org/)
 * [Seed](https://webassembly.org/) is used to build the WASM SPA
-* [basic-http-server](https://github.com/brson/basic-http-server) is used as a development tool to serve files during dev
-* [Docker](https://www.docker.com/) is used to run the webapp in a containerized 
-environment.
+* [basic-http-server](https://github.com/brson/basic-http-server)
+* [Docker](https://www.docker.com/)
 
 In order to build the app, you need the following tools installed:
 
