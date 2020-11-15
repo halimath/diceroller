@@ -23,6 +23,10 @@
       margin-right: 0.6em;
     }
 
+    .p-3 {
+      padding-top: 0.9em;
+    }
+
     .result {
       font-size: 2em;
       font-weight: bold;
@@ -50,6 +54,10 @@
         });
       }
     };
+
+    function notify(message) {
+      M.toast({html: message});
+    }
   </script>
 
   <script type="module">

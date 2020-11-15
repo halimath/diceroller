@@ -13,6 +13,9 @@ extern "C" {
 
     #[wasm_bindgen(js_namespace = SharingWrapper, js_name = "shareText")]
     fn share_text(text: &str) -> JsValue;
+
+    #[wasm_bindgen]
+    fn notify(message: &str);
 }
 
 #[derive(Clone)]
@@ -74,8 +77,8 @@ fn init(url: Url, _: &mut impl Orders<Msg>) -> Model {
     m
 }
 
-fn update(msg: Msg, model: &mut Model, _: &mut impl Orders<Msg>) {
-    debug!("update received message {:?}", msg);
+fn update(msg: Msg, model: &mut Model, orders: &mut impl Orders<Msg>) {
+    debug!("update received message {:?}", msg);    
 
     match msg {
         Msg::AddDie(die) => {
@@ -102,6 +105,7 @@ fn update(msg: Msg, model: &mut Model, _: &mut impl Orders<Msg>) {
                     .expect("must have a roll to copy")
                     .aggregate()
             ));
+            notify("Copied result to the clipboard.");
         }
         Msg::ShareResult => {
             if !is_sharing_supported() {
@@ -122,7 +126,9 @@ fn update(msg: Msg, model: &mut Model, _: &mut impl Orders<Msg>) {
 
             info!("{:?}", r);
         }
-    }
+    };
+
+    orders.after_next_render(|_| debug!("Rendering complete"));
 }
 
 fn update_url(model: &Model) {
@@ -148,87 +154,121 @@ fn update_url(model: &Model) {
 }
 
 fn view(model: &Model) -> Vec<Node<Msg>> {
-    app_shell(div![
-        C!["row"],
+    app_shell(nodes![
         div![
-            C!["col s12 m6 l4 x4"],
-            p![C!["flow-text"], "Click a dice to add it to the pool.",],
-            nodes![
-                add_die_view(Die::Ability),
-                add_die_view(Die::Proficiency),
-                add_die_view(Die::Difficulty),
-                add_die_view(Die::Challange),
-                add_die_view(Die::Boost),
-                add_die_view(Die::Setback),
-            ],
-        ],
-        IF!(not(model.pool.is_empty()) =>
+            C!["row"],
+
             div![
-                C!["col s12 m6 l4 x4"],
+                C!["col s12 m12 l6"],
+                h2!["Pool"],
+
+                pool_view(&model.pool),
+
                 p![
-                    C!["flow-text"],
-                    "Click a dice to remove it from the pool.",
+                    C!["flow-text"], 
+                    "Tap a small die below to add it to the pool. Tap a die from the pool to remove it.",
                 ],
 
                 p![
-                    model
-                        .pool
-                        .iter()
-                        .map(|e| remove_die_view(*e))
-                        .collect::<Vec<Node<Msg>>>(),
-                ],
+                    C!["center"],
+                    nodes![
+                        add_die_view(Die::Ability),
+                        add_die_view(Die::Proficiency),
+                        add_die_view(Die::Difficulty),
+                        add_die_view(Die::Challange),
+                        add_die_view(Die::Boost),
+                        add_die_view(Die::Setback),
+                    ],
+                ],                
+            ],
 
-                p![
-                    C!["right"],
-                    button![
-                        C!["btn waves-effect waves-light blue-grey darken-4 m-r2 material-icons"],
-                        "casino",
-                        ev(Ev::Click, |_| Msg::Roll),
-                    ],
-                    button![
-                        C!["btn waves-effect waves-light blue-grey darken-1 material-icons"],
-                        "clear",
-                        ev(Ev::Click, |_| Msg::ClearPool),
-                    ],
-                ]
-            ]
-        ),
-        model.roll.as_ref().map(pool_roll_view),
+            model.roll.as_ref().map(pool_roll_view),
+        ],
     ])
+}
+
+fn pool_view(pool: &Pool) -> Vec<Node<Msg>> {
+    if pool.is_empty() {
+        nodes![
+            p![
+                C!["center"],
+                "No die has been added to the pool.",
+            ],
+        ]
+    } else {
+        nodes![
+            p![
+                C!["center-align"],
+                pool
+                .iter()
+                .map(|e| remove_die_view(*e))
+                .collect::<Vec<Node<Msg>>>(),
+            ],
+
+            p![
+                C!["right-align"],
+
+                a![
+                    C!["btn waves-effect waves-light m-r2 blue-grey lighten-1"],
+                    ev(Ev::Click, |_| Msg::ClearPool),
+                    "Empty Pool",
+                ],
+
+                a![
+                    C!["btn waves-effect waves-light m-r2 light-blue darken-4"],
+                    ev(Ev::Click, |_| Msg::Roll),
+                    "Roll Dice",
+                ],
+            ],            
+        ]
+    }
 }
 
 fn pool_roll_view(pool_roll: &PoolRoll) -> Node<Msg> {
     div![
-        C!["col s12 m6 l4 x4"],
+        C!["col s12 m12 l6"],
+
+        h2![
+            "Result",
+        ],
+
         p![
             C!["flow-text", "result"],
             format!("{}", pool_roll.aggregate()),
-        ],
-        p![
-            C!["right"],
-            button![
-                C!["btn waves-effect waves-light blue-grey darken-4 m-r2 material-icons"],
-                "content_copy",
+        ],            
+
+
+        div![
+            C!["right-align"],
+            a![
+                C!["btn waves-effect waves-light m-r2 blue-grey lighten-1"],
                 ev(Ev::Click, |_| Msg::CopyResultToClipboard),
+                i![
+                    C!["material-icons"],
+                    "content_copy",    
+                ],
             ],
-            IF!(is_sharing_supported() => button![
-                C!["btn waves-effect waves-light blue-grey darken-4 m-r2 material-icons"],
-                "share",
+            IF!(is_sharing_supported() => a![
+                C!["btn waves-effect waves-light m-r2 blue-grey lighten-1"],
                 ev(Ev::Click, |_| Msg::ShareResult),
+                i![
+                    C!["material-icons"],
+                    "share",    
+                ],
             ]),
         ],
     ]
 }
 
 fn remove_die_view(die: Die) -> Node<Msg> {
-    die_btn(die, ev(Ev::Click, move |_| Msg::RemoveDie(die)))
+    die_btn(die, "", ev(Ev::Click, move |_| Msg::RemoveDie(die)))
 }
 
 fn add_die_view(die: Die) -> Node<Msg> {
-    die_btn(die, ev(Ev::Click, move |_| Msg::AddDie(die)))
+    die_btn(die, "btn-small", ev(Ev::Click, move |_| Msg::AddDie(die)))
 }
 
-fn die_btn(die: Die, evt: EventHandler<Msg>) -> Node<Msg> {
+fn die_btn(die: Die, additional_style_classes: &str, evt: EventHandler<Msg>) -> Node<Msg> {
     let (style_classes, label) = match die {
         Die::Ability => ("green", "A"),
         Die::Proficiency => ("yellow black-text", "P"),
@@ -239,13 +279,13 @@ fn die_btn(die: Die, evt: EventHandler<Msg>) -> Node<Msg> {
     };
 
     button![
-        C!["btn-floating waves-effect waves-light m-r2", style_classes],
+        C!["btn waves-effect waves-light m-r2", style_classes, additional_style_classes],
         label,
         evt,
     ]
 }
 
-fn app_shell(body: Node<Msg>) -> Vec<Node<Msg>> {
+fn app_shell(body: Vec<Node<Msg>>) -> Vec<Node<Msg>> {
     nodes![
         header![nav![div![
             C!["nav-wrapper blue-grey darken-4"],
