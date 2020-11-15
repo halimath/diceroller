@@ -6,7 +6,7 @@
         {
             "label": "Build WASM assembly",
             "type": "shell",
-            "command": "wasm-pack build --target web",
+            "command": "wasm-pack build --target web --dev",
             "options": {
                 "cwd": "app",
             },
