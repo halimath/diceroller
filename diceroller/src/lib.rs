@@ -14,6 +14,8 @@ pub enum Symbol {
     Threat,
     Triumph,
     Despair,
+    LightSide,
+    DarkSide,
 }
 
 // --
@@ -45,6 +47,7 @@ pub enum Die {
     Challange,
     Boost,
     Setback,
+    Force,
 }
 
 impl Die {
@@ -118,6 +121,21 @@ impl Die {
                 Side::One(Symbol::Failure),
                 Side::One(Symbol::Threat),
                 Side::One(Symbol::Threat),
+            ],
+
+            Self::Force => &[
+                Side::One(Symbol::LightSide),
+                Side::One(Symbol::LightSide),
+                Side::One(Symbol::DarkSide),
+                Side::One(Symbol::DarkSide),
+                Side::One(Symbol::DarkSide),
+                Side::One(Symbol::DarkSide),
+                Side::One(Symbol::DarkSide),
+                Side::One(Symbol::DarkSide),
+                Side::Two(Symbol::LightSide, Symbol::LightSide),
+                Side::Two(Symbol::LightSide, Symbol::LightSide),
+                Side::Two(Symbol::LightSide, Symbol::LightSide),
+                Side::Two(Symbol::DarkSide, Symbol::DarkSide),
             ],
         }
     }
@@ -248,6 +266,7 @@ impl AggregatedSymbols {
 
         aggregated_symbols.normalize(Symbol::Success, Symbol::Failure);
         aggregated_symbols.normalize(Symbol::Advantage, Symbol::Threat);
+        aggregated_symbols.normalize(Symbol::LightSide, Symbol::DarkSide);
 
         aggregated_symbols
     }
@@ -320,6 +339,16 @@ impl std::fmt::Display for AggregatedSymbols {
             Some(1) => write!(f, "1 despair ")?,
             Some(c) => write!(f, "{} despairs ", c)?,
             None => (),
+        }
+
+        match self.totals.get(&Symbol::LightSide) {
+            Some(c) => write!(f, "{} light side ", c)?,
+            None => (),            
+        }
+
+        match self.totals.get(&Symbol::DarkSide) {
+            Some(c) => write!(f, "{} dark side ", c)?,
+            None => (),            
         }
 
         Ok(())
