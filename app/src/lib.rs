@@ -66,6 +66,7 @@ fn init(url: Url, _: &mut impl Orders<Msg>) -> Model {
                 'C' => m.pool.add(Die::Challange),
                 'B' => m.pool.add(Die::Boost),
                 'S' => m.pool.add(Die::Setback),
+                'F' => m.pool.add(Die::Force),
                 c => {
                     warn!("Got invalid die character in URL: {}. Will be ignored", c);
                 }
@@ -142,6 +143,7 @@ fn update_url(model: &Model) {
             Die::Challange => 'C',
             Die::Boost => 'B',
             Die::Setback => 'S',
+            Die::Force => 'F',
         });
     }
 
@@ -178,6 +180,7 @@ fn view(model: &Model) -> Vec<Node<Msg>> {
                         add_die_view(Die::Challange),
                         add_die_view(Die::Boost),
                         add_die_view(Die::Setback),
+                        add_die_view(Die::Force),
                     ],
                 ],                
             ],
@@ -232,11 +235,8 @@ fn pool_roll_view(pool_roll: &PoolRoll) -> Node<Msg> {
             "Result",
         ],
 
-        p![
-            C!["flow-text", "result"],
-            format!("{}", pool_roll.aggregate()),
-        ],            
 
+        aggregated_symbols_view(pool_roll.aggregate()),
 
         div![
             C!["right-align"],
@@ -260,6 +260,65 @@ fn pool_roll_view(pool_roll: &PoolRoll) -> Node<Msg> {
     ]
 }
 
+fn aggregated_symbols_view (aggregate: AggregatedSymbols) -> Node<Msg> {    
+    if aggregate.totals.is_empty() {
+        return p![C!["flow-text result"], "<blank>"];
+    }
+
+    let mut list_items = Vec::new();
+
+    match aggregate.totals.get(&Symbol::Success) {
+        Some(1) => list_items.push("1 Success".to_owned()),
+        Some(c) => list_items.push(format!("{} Successes", c)),
+        None => (),
+    }
+
+    match aggregate.totals.get(&Symbol::Failure) {
+        Some(1) => list_items.push("1 Failure".to_owned()),
+        Some(c) => list_items.push(format!("{} Failures", c)),
+        None => (),
+    }
+
+    match aggregate.totals.get(&Symbol::Advantage) {
+        Some(1) => list_items.push("1 Advantage".to_owned()),
+        Some(c) => list_items.push(format!("{} Advantages", c)),
+        None => (),
+    }
+
+    match aggregate.totals.get(&Symbol::Threat) {
+        Some(1) => list_items.push("1 Threat".to_owned()),
+        Some(c) => list_items.push(format!("{} Threats", c)),
+        None => (),
+    }
+
+    match aggregate.totals.get(&Symbol::Triumph) {
+        Some(1) => list_items.push("1 Triumph".to_owned()),
+        Some(c) => list_items.push(format!("{} Triumphs", c)),
+        None => (),
+    }
+
+    match aggregate.totals.get(&Symbol::Despair) {
+        Some(1) => list_items.push("1 Despair".to_owned()),
+        Some(c) => list_items.push(format!("{} Despairs", c)),
+        None => (),
+    }
+
+    match aggregate.totals.get(&Symbol::LightSide) {
+        Some(c) => list_items.push(format!("{} Light Side", c)),
+        None => (),            
+    }
+
+    match aggregate.totals.get(&Symbol::DarkSide) {
+        Some(c) => list_items.push(format!("{} Dark Side", c)),
+        None => (),            
+    }    
+
+    ul![
+        C!["collection"],
+        list_items.iter().map(|t| li![C!["collection-item result"], t]).collect::<Vec<Node<Msg>>>(),
+    ]
+}
+
 fn remove_die_view(die: Die) -> Node<Msg> {
     die_btn(die, "", ev(Ev::Click, move |_| Msg::RemoveDie(die)))
 }
@@ -276,6 +335,7 @@ fn die_btn(die: Die, additional_style_classes: &str, evt: EventHandler<Msg>) -> 
         Die::Challange => ("red", "C"),
         Die::Boost => ("blue lighten-2 black-text", "B"),
         Die::Setback => ("black", "S"),
+        Die::Force => ("white black-text", "F"),
     };
 
     button![
