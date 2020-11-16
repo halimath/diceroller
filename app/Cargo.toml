@@ -1,6 +1,6 @@
 [package]
 name = "diceroller-app"
-version = "0.3.3"
+version = "0.3.4"
 authors = ["Alexander Metzner <alexander.metzner@gmail.com>"]
 edition = "2018"
 
