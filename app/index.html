@@ -17,25 +17,36 @@
       flex-direction: column;
     }
 
+    @media screen and (max-width: 600px) {
+      .container {
+        width: 100%;
+      }
+    }
+
     main {
       flex: 1 0 auto;
     }
 
+    h2 {
+      font-size: 1.6rem;
+    }
+
     .m-r2 {
-      margin-right: 0.6em;
+      margin-right: 0.4em;
     }
 
     .p-3 {
-      padding-top: 0.9em;
+      padding-top: 0.6em;
     }
 
     .result {
-      font-size: 2em;
+      font-size: 1.5rem;
       font-weight: bold;
     }
 
     .roll-icon {
-      width: 4em;
+      width: 4rem;
+      height: 4rem;
     }
   </style>
 </head>
@@ -48,6 +59,14 @@
   <svg aria-hidden="true" style="position: absolute; width: 0; height: 0; overflow: hidden; display: none;"
     version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <defs>
+      <symbol id="icon-light-side" viewBox="0 0 20 20">
+        <circle cx="10" cy="10" r="9" stroke="black" fill="none"/>
+      </symbol>
+
+      <symbol id="icon-dark-side" viewBox="0 0 20 20">
+        <circle cx="10" cy="10" r="9"/>
+      </symbol>
+
       <symbol id="icon-triumph" viewBox="0 0 373.000000 462.000000">
         <g transform="translate(0.000000,462.000000) scale(0.100000,-0.100000)" fill="#000000" stroke="none">
           <path d="M1662 4283 c-7 -186 -12 -354 -12 -374 l0 -36 -72 -7 c-98 -9 -282

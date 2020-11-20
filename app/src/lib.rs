@@ -164,15 +164,8 @@ fn view(model: &Model) -> Vec<Node<Msg>> {
                 C!["col s12 m12 l6"],
                 h2!["Pool"],
 
-                pool_view(&model.pool),
-
                 p![
-                    C!["flow-text"], 
-                    "Tap a small die below to add it to the pool. Tap a die from the pool to remove it.",
-                ],
-
-                p![
-                    C!["center"],
+                    C!["center-align"],
                     nodes![
                         add_die_view(Die::Ability),
                         add_die_view(Die::Proficiency),
@@ -182,7 +175,14 @@ fn view(model: &Model) -> Vec<Node<Msg>> {
                         add_die_view(Die::Setback),
                         add_die_view(Die::Force),
                     ],
-                ],                
+                ],    
+                
+                p![
+                    // C!["flow-text"], 
+                    "Tap a small die above to add it to the pool. Tap a die from the pool below to remove it.",
+                ],
+
+                pool_view(&model.pool),
             ],
 
             model.roll.as_ref().map(pool_roll_view),
@@ -194,7 +194,7 @@ fn pool_view(pool: &Pool) -> Vec<Node<Msg>> {
     if pool.is_empty() {
         nodes![
             p![
-                C!["center"],
+                C!["center-align"],
                 "No die has been added to the pool.",
             ],
         ]
@@ -235,9 +235,11 @@ fn pool_roll_view(pool_roll: &PoolRoll) -> Node<Msg> {
             "Result",
         ],
 
-
-        aggregated_symbols_view(pool_roll.aggregate()),
-        aggregated_symbols_text_view(pool_roll.aggregate()),
+        div![
+            C!["center-align"],
+            aggregated_symbols_view(pool_roll.aggregate()),
+            aggregated_symbols_text_view(pool_roll.aggregate()),
+        ],
 
         div![
             C!["right-align"],
@@ -264,12 +266,14 @@ fn pool_roll_view(pool_roll: &PoolRoll) -> Node<Msg> {
 fn aggregated_symbols_view (aggregate: AggregatedSymbols) -> Vec<Node<Msg>> {
     let mut icons = Vec::new();
 
-    contribute_symbol_icons(&mut icons, &aggregate, Symbol::Triumph);
     contribute_symbol_icons(&mut icons, &aggregate, Symbol::Success);
     contribute_symbol_icons(&mut icons, &aggregate, Symbol::Advantage);
-    contribute_symbol_icons(&mut icons, &aggregate, Symbol::Despair);
     contribute_symbol_icons(&mut icons, &aggregate, Symbol::Failure);
     contribute_symbol_icons(&mut icons, &aggregate, Symbol::Threat);
+    contribute_symbol_icons(&mut icons, &aggregate, Symbol::Triumph);
+    contribute_symbol_icons(&mut icons, &aggregate, Symbol::Despair);
+    contribute_symbol_icons(&mut icons, &aggregate, Symbol::LightSide);
+    contribute_symbol_icons(&mut icons, &aggregate, Symbol::DarkSide);
 
     icons
 }
@@ -290,7 +294,8 @@ fn symbol_icon (s: Symbol) -> Node<Msg> {
         Symbol::Despair => "#icon-despair",
         Symbol::Failure => "#icon-failure",
         Symbol::Threat => "#icon-threat",
-        _ => panic!("not implemented"),
+        Symbol::LightSide => "#icon-light-side",
+        Symbol::DarkSide => "#icon-dark-side",
     };
 
     let mut use_element = seed::virtual_dom::El::empty(seed::dom_entity_names::Tag::Use);
