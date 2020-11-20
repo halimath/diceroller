@@ -305,52 +305,54 @@ impl std::fmt::Display for AggregatedSymbols {
             return write!(f, "<blank>");
         }
 
+        let mut text_elements = Vec::new();
+
         match self.totals.get(&Symbol::Success) {
-            Some(1) => write!(f, "1 success ")?,
-            Some(c) => write!(f, "{} successes ", c)?,
+            Some(1) => text_elements.push("1 Success".to_owned()),
+            Some(c) => text_elements.push(format!("{} Successes", c)),
             None => (),
         }
-
+    
         match self.totals.get(&Symbol::Failure) {
-            Some(1) => write!(f, "1 failure ")?,
-            Some(c) => write!(f, "{} failures ", c)?,
+            Some(1) => text_elements.push("1 Failure".to_owned()),
+            Some(c) => text_elements.push(format!("{} Failures", c)),
             None => (),
         }
-
+    
         match self.totals.get(&Symbol::Advantage) {
-            Some(1) => write!(f, "1 advantage ")?,
-            Some(c) => write!(f, "{} advantages ", c)?,
+            Some(1) => text_elements.push("1 Advantage".to_owned()),
+            Some(c) => text_elements.push(format!("{} Advantages", c)),
             None => (),
         }
-
+    
         match self.totals.get(&Symbol::Threat) {
-            Some(1) => write!(f, "1 threat ")?,
-            Some(c) => write!(f, "{} threats ", c)?,
+            Some(1) => text_elements.push("1 Threat".to_owned()),
+            Some(c) => text_elements.push(format!("{} Threats", c)),
             None => (),
         }
-
+    
         match self.totals.get(&Symbol::Triumph) {
-            Some(1) => write!(f, "1 triumph ")?,
-            Some(c) => write!(f, "{} triumphs ", c)?,
+            Some(1) => text_elements.push("1 Triumph".to_owned()),
+            Some(c) => text_elements.push(format!("{} Triumphs", c)),
             None => (),
         }
-
+    
         match self.totals.get(&Symbol::Despair) {
-            Some(1) => write!(f, "1 despair ")?,
-            Some(c) => write!(f, "{} despairs ", c)?,
+            Some(1) => text_elements.push("1 Despair".to_owned()),
+            Some(c) => text_elements.push(format!("{} Despairs", c)),
             None => (),
         }
-
+    
         match self.totals.get(&Symbol::LightSide) {
-            Some(c) => write!(f, "{} light side ", c)?,
+            Some(c) => text_elements.push(format!("{} Light Side", c)),
             None => (),            
         }
-
+    
         match self.totals.get(&Symbol::DarkSide) {
-            Some(c) => write!(f, "{} dark side ", c)?,
+            Some(c) => text_elements.push(format!("{} Dark Side", c)),
             None => (),            
-        }
-
-        Ok(())
+        }    
+    
+        write!(f, "{}", text_elements.join(", "))
     }
 }
