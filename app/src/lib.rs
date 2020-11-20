@@ -237,6 +237,7 @@ fn pool_roll_view(pool_roll: &PoolRoll) -> Node<Msg> {
 
 
         aggregated_symbols_view(pool_roll.aggregate()),
+        aggregated_symbols_text_view(pool_roll.aggregate()),
 
         div![
             C!["right-align"],
@@ -260,63 +261,47 @@ fn pool_roll_view(pool_roll: &PoolRoll) -> Node<Msg> {
     ]
 }
 
-fn aggregated_symbols_view (aggregate: AggregatedSymbols) -> Node<Msg> {    
-    if aggregate.totals.is_empty() {
-        return p![C!["flow-text result"], "<blank>"];
+fn aggregated_symbols_view (aggregate: AggregatedSymbols) -> Vec<Node<Msg>> {
+    let mut icons = Vec::new();
+
+    contribute_symbol_icons(&mut icons, &aggregate, Symbol::Triumph);
+    contribute_symbol_icons(&mut icons, &aggregate, Symbol::Success);
+    contribute_symbol_icons(&mut icons, &aggregate, Symbol::Advantage);
+    contribute_symbol_icons(&mut icons, &aggregate, Symbol::Despair);
+    contribute_symbol_icons(&mut icons, &aggregate, Symbol::Failure);
+    contribute_symbol_icons(&mut icons, &aggregate, Symbol::Threat);
+
+    icons
+}
+
+fn contribute_symbol_icons (icons: &mut Vec<Node<Msg>>, aggregate: &AggregatedSymbols, symbol: Symbol) {
+    if let Some(successes) = aggregate.totals.get(&symbol)  {
+        for _ in 0..*successes {
+            icons.push(symbol_icon(symbol));
+        }    
     }
+}
 
-    let mut list_items = Vec::new();
+fn symbol_icon (s: Symbol) -> Node<Msg> {
+    let id = match s {
+        Symbol::Triumph => "#icon-triumph",
+        Symbol::Success => "#icon-success",
+        Symbol::Advantage => "#icon-advantage",
+        Symbol::Despair => "#icon-despair",
+        Symbol::Failure => "#icon-failure",
+        Symbol::Threat => "#icon-threat",
+        _ => panic!("not implemented"),
+    };
 
-    match aggregate.totals.get(&Symbol::Success) {
-        Some(1) => list_items.push("1 Success".to_owned()),
-        Some(c) => list_items.push(format!("{} Successes", c)),
-        None => (),
-    }
+    let mut use_element = seed::virtual_dom::El::empty(seed::dom_entity_names::Tag::Use);
+    use_element.namespace = Some(seed::browser::dom::Namespace::Svg);
+    use_element.add_attr("href", id);
 
-    match aggregate.totals.get(&Symbol::Failure) {
-        Some(1) => list_items.push("1 Failure".to_owned()),
-        Some(c) => list_items.push(format!("{} Failures", c)),
-        None => (),
-    }
+    svg![C!["roll-icon"], use_element]
+}
 
-    match aggregate.totals.get(&Symbol::Advantage) {
-        Some(1) => list_items.push("1 Advantage".to_owned()),
-        Some(c) => list_items.push(format!("{} Advantages", c)),
-        None => (),
-    }
-
-    match aggregate.totals.get(&Symbol::Threat) {
-        Some(1) => list_items.push("1 Threat".to_owned()),
-        Some(c) => list_items.push(format!("{} Threats", c)),
-        None => (),
-    }
-
-    match aggregate.totals.get(&Symbol::Triumph) {
-        Some(1) => list_items.push("1 Triumph".to_owned()),
-        Some(c) => list_items.push(format!("{} Triumphs", c)),
-        None => (),
-    }
-
-    match aggregate.totals.get(&Symbol::Despair) {
-        Some(1) => list_items.push("1 Despair".to_owned()),
-        Some(c) => list_items.push(format!("{} Despairs", c)),
-        None => (),
-    }
-
-    match aggregate.totals.get(&Symbol::LightSide) {
-        Some(c) => list_items.push(format!("{} Light Side", c)),
-        None => (),            
-    }
-
-    match aggregate.totals.get(&Symbol::DarkSide) {
-        Some(c) => list_items.push(format!("{} Dark Side", c)),
-        None => (),            
-    }    
-
-    ul![
-        C!["collection"],
-        list_items.iter().map(|t| li![C!["collection-item result"], t]).collect::<Vec<Node<Msg>>>(),
-    ]
+fn aggregated_symbols_text_view (aggregate: AggregatedSymbols) -> Node<Msg> {    
+    p![C!["flow-text result"], format!("{}", aggregate)]
 }
 
 fn remove_die_view(die: Die) -> Node<Msg> {
