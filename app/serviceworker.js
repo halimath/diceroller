@@ -1,8 +1,11 @@
 console.log("Service worker");
 
+const CacheVersion = 2;
+const CacheName = `diceroller-cache-v${CacheVersion}`;
+
 self.addEventListener("install", e => {
     console.log("Installing service worker");
-    e.waitUntil(caches.open("diceroller-cache-v1")
+    e.waitUntil(caches.open(CacheName)
         .then(cache => {        
             return cache.addAll([
                 "/index.html",
