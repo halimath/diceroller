@@ -5,12 +5,14 @@ import {Die, DieKind, Model, NormalizedPoolResult, Pool, PoolResult, Symbol} fro
 
 import {version} from "../../package.json"
 import { isClipboardSupported, isSharingSupported } from "src/browser"
+import { m } from "src/utils/i18n"
+import { formatPoolResult } from "src/utils"
 
 export function root(model: Model, context: wecco.AppContext<Message>): wecco.ElementUpdate {
     return appShell(wecco.html`
     <div class="row">
         <div class="col s12 m12 l6">
-            <h2>Pool</h2>
+            <h2>${m("pool.hl")}</h2>
             <p class="center-align">
                 ${addDie(DieKind.Ability, context)}
                 ${addDie(DieKind.Proficiency, context)}
@@ -20,7 +22,7 @@ export function root(model: Model, context: wecco.AppContext<Message>): wecco.El
                 ${addDie(DieKind.Setback, context)}
                 ${addDie(DieKind.Force, context)}
             </p>
-            <p>Tap a small die above to add it to the pool. Tap a die from the pool below to remove it.</p>
+            <p>${m("pool.usage.t")}</p>
             ${pool(model.pool, context)}
         </div>
         ${model.poolResult ? result(model.poolResult.normalize(), context) : ""}
@@ -30,7 +32,7 @@ export function root(model: Model, context: wecco.AppContext<Message>): wecco.El
 
 function pool(pool: Pool, context: wecco.AppContext<Message>): wecco.ElementUpdate {
     if (pool.empty) {
-        return wecco.html`<p class="center-align flow-text"><em>Empty pool</em></p>`
+        return wecco.html`<p class="center-align flow-text"><em>${m("pool.empty.t")}</em></p>`
     }
 
     return wecco.html`
@@ -38,8 +40,8 @@ function pool(pool: Pool, context: wecco.AppContext<Message>): wecco.ElementUpda
             ${pool.dice.map(d => removeDie(d, context))}
         </p>
         <p class="right-align">
-            <a class="btn waves-effect waves-light m-r2 blue-grey lighten-1" @click=${() => context.emit(new EmptyPool())}>Empty Pool</a>
-            <a class="btn waves-effect waves-light m-r2 light-blue darken-4" @click=${() => context.emit(new Roll())}>Roll Dice</a>
+            <a class="btn waves-effect waves-light m-r2 blue-grey lighten-1" @click=${() => context.emit(new EmptyPool())}>${m("pool.emptyPool.t")}</a>
+            <a class="btn waves-effect waves-light m-r2 light-blue darken-4" @click=${() => context.emit(new Roll())}>${m("pool.roll.t")}</a>
         </p>
     `
 }
@@ -47,7 +49,7 @@ function pool(pool: Pool, context: wecco.AppContext<Message>): wecco.ElementUpda
 function result(result: NormalizedPoolResult, context: wecco.AppContext<Message>): wecco.ElementUpdate {
     return wecco.html`
     <div class="col s12 m12 l6">
-        <h2>Result</h2>
+        <h2>${m("result.hl")}</h2>
         <div class="center-align">
             ${resultIcons(result)}
             ${resultText(result)}
@@ -61,7 +63,7 @@ function result(result: NormalizedPoolResult, context: wecco.AppContext<Message>
 }
 
 function resultText(result: NormalizedPoolResult): wecco.ElementUpdate {
-    return wecco.html`<p class="flow-text">${result.format()}</p>`
+    return wecco.html`<p class="flow-text">${formatPoolResult(result)}</p>`
 }
 
 function resultIcons(result: NormalizedPoolResult): wecco.ElementUpdate {

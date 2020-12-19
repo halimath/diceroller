@@ -184,102 +184,6 @@ export class Pool {
 }
 
 export interface NormalizedPoolResult extends Record<Symbol, number> {
-    format(): string
-}
-
-class NormalizedPoolResultImpl implements NormalizedPoolResult {
-    get success(): number {
-        return this.data[Symbol.Success] ?? 0
-    }
-
-    get advantage(): number {
-        return this.data[Symbol.Advantage] ?? 0
-    }
-
-    get triumph(): number {
-        return this.data[Symbol.Triumph] ?? 0
-    }
-
-    get failure(): number {
-        return this.data[Symbol.Failure] ?? 0
-    }
-
-    get threat(): number {
-        return this.data[Symbol.Threat] ?? 0
-    }
-
-    get despair(): number {
-        return this.data[Symbol.Despair] ?? 0
-    }
-
-    get lightside(): number {
-        return this.data[Symbol.LightSide] ?? 0
-    }
-
-    get darkside(): number {
-        return this.data[Symbol.DarkSide] ?? 0
-    }
-
-    constructor (private readonly data: {[key in Symbol]?: number }) {}
-
-    format(): string {
-        let s = ""
-    
-        if ((this.data[Symbol.Success] ?? 0) > 0) {
-            s += `${this.data[Symbol.Success]} Success${(this.data[Symbol.Success] ?? 0) > 1 ? "es" : ""}`
-        }
-    
-        if ((this.data[Symbol.Advantage] ?? 0) > 0) {
-            if (s.length > 0) {
-                s += ", "
-            }
-            s += `${this.data[Symbol.Advantage]} Advantage${(this.data[Symbol.Advantage] ?? 0) > 1 ? "s" : ""}`
-        }
-    
-        if ((this.data[Symbol.Triumph] ?? 0) > 0) {
-            if (s.length > 0) {
-                s += ", "
-            }
-            s += `${this.data[Symbol.Triumph]} Triumph${(this.data[Symbol.Triumph] ?? 0) > 1 ? "s" : ""}`
-        }
-    
-        if ((this.data[Symbol.Failure] ?? 0) > 0) {
-            if (s.length > 0) {
-                s += ", "
-            }
-            s += `${this.data[Symbol.Failure]} Failure${(this.data[Symbol.Failure] ?? 0) > 1 ? "s" : ""}`
-        }
-    
-        if ((this.data[Symbol.Threat] ?? 0) > 0) {
-            if (s.length > 0) {
-                s += ", "
-            }
-            s += `${this.data[Symbol.Threat]} Threat${(this.data[Symbol.Threat] ?? 0) > 1 ? "s" : ""}`
-        }
-    
-        if ((this.data[Symbol.Despair] ?? 0) > 0) {
-            if (s.length > 0) {
-                s += ", "
-            }
-            s += `${this.data[Symbol.Despair]} Despair${(this.data[Symbol.Despair] ?? 0) > 1 ? "s" : ""}`
-        }
-    
-        if ((this.data[Symbol.LightSide] ?? 0) > 0) {
-            if (s.length > 0) {
-                s += ", "
-            }
-            s += `${this.data[Symbol.LightSide]} Light Side${(this.data[Symbol.LightSide] ?? 0) > 1 ? "s" : ""}`
-        }
-    
-        if ((this.data[Symbol.DarkSide] ?? 0) > 0) {
-            if (s.length > 0) {
-                s += ", "
-            }
-            s += `${this.data[Symbol.DarkSide]} Dark Side${(this.data[Symbol.DarkSide] ?? 0) > 1 ? "s" : ""}`
-        }
-    
-        return s
-    }
 }
 
 export class PoolResult {
@@ -288,7 +192,17 @@ export class PoolResult {
     normalize(): NormalizedPoolResult {
         const aggregates = this.aggregate()
         
-        const result: {[key in Symbol]?: number} = {}
+        const tmp: {[key in Symbol]?: number} = {}
+        tmp[Symbol.Success] = 0
+        tmp[Symbol.Advantage] = 0
+        tmp[Symbol.Triumph] = 0
+        tmp[Symbol.Failure] = 0
+        tmp[Symbol.Threat] = 0
+        tmp[Symbol.Despair] = 0
+        tmp[Symbol.LightSide] = 0
+        tmp[Symbol.DarkSide] = 0
+
+        const result = tmp as NormalizedPoolResult
 
         const applyDelta = (left: Symbol, right: Symbol) => {
             if (aggregates[left] > aggregates[right]) {
@@ -312,7 +226,7 @@ export class PoolResult {
         copyPositive(Symbol.LightSide)
         copyPositive(Symbol.DarkSide)
 
-        return new NormalizedPoolResultImpl(result)
+        return result
     }
 
     private aggregate(): {[key in Symbol]: number} {

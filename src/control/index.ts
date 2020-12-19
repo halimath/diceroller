@@ -1,5 +1,6 @@
 import { copyTextToClipboard, isClipboardSupported, isSharingSupported, notify, shareText } from "src/browser"
-import { poolToUrlHash } from "src/utils"
+import { formatPoolResult, poolToUrlHash } from "src/utils"
+import { m } from "src/utils/i18n"
 import { Die, DieKind, Model, Pool } from "../models"
 
 export class AddDie {
@@ -58,8 +59,8 @@ export function update(model: Model, msg: Message): Model {
             }
 
             if (isClipboardSupported()) {
-                copyTextToClipboard(model.poolResult.normalize().format())
-                notify("Copied to clipboard")
+                copyTextToClipboard(formatPoolResult(model.poolResult.normalize()))
+                notify(m("result.copied.t"))
             }
 
             return model
@@ -71,7 +72,7 @@ export function update(model: Model, msg: Message): Model {
             }
 
             if (isSharingSupported()) {
-                shareText(model.poolResult.normalize().format())
+                shareText(formatPoolResult(model.poolResult.normalize()))
             }
 
             return model

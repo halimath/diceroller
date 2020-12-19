@@ -2,7 +2,7 @@
 
 ## Application
 * sort dice in pool - currently they are displayed in order of addition
-* i18n - localize all texts, abbrevs, ...
+* ~~i18n - localize all texts, abbrevs, ...~~
 * more tests
 
 ## Features
