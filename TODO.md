@@ -12,7 +12,6 @@
 * Share - include icons in shared content for easier recognition
 
 ## Build and Automation
-* tslint
+* ~~ESLint~~
 * prettify source
 * CI - bitbucket pipelines
-  
