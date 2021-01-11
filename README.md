@@ -33,6 +33,11 @@ To run the tests, run
 $ npm test
 ```
 
+To running the lint run the following command
+```
+$ npm run lint
+```
+
 ## License
 
 This project is licensed under the Apache License V2.
