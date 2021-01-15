@@ -2,7 +2,7 @@ import * as wecco from "@wecco/core"
 import { version } from "../../../package.json"
 import { isClipboardSupported, isSharingSupported } from "../browser"
 import { AddDie, Copy, EmptyPool, Message, RemoveDie, Roll, Share } from "../control"
-import { Die, DieKind, Model, NormalizedPoolResult, Pool, DieSymbol } from "../models"
+import { Die, DieKind, Model, AggregatedPoolResult, Pool, DieSymbol, PoolResult } from "../models"
 import { formatPoolResult } from "../utils"
 import { m } from "../utils/i18n"
 
@@ -10,61 +10,81 @@ export function root(model: Model, context: wecco.AppContext<Message>): wecco.El
     return appShell(wecco.html`
     <div class="row">
         <div class="col s12 m12 l6">
-            <h1>${m("pool.hl")}</h1>
-            <p class="center-align">
-                ${addDie(DieKind.Ability, context)}
-                ${addDie(DieKind.Proficiency, context)}
-                ${addDie(DieKind.Difficulty, context)}
-                ${addDie(DieKind.Challange, context)}
-                ${addDie(DieKind.Boost, context)}
-                ${addDie(DieKind.Setback, context)}
-                ${addDie(DieKind.Force, context)}
-            </p>
-            <p>${m("pool.usage.t")}</p>
             ${pool(model.pool, context)}
+            <hr>
+            ${toolbar(context)}
         </div>
-        ${model.poolResult ? result(model.poolResult.normalize(), context) : ""}
+        ${model.poolResult ? result(model.poolResult, context) : ""}
     </div>
     `)
 }
 
-function pool(pool: Pool, context: wecco.AppContext<Message>): wecco.ElementUpdate {
-    if (pool.empty) {
-        return wecco.html`<p class="center-align flow-text"><em>${m("pool.empty.t")}</em></p>`
-    }
-
+function toolbar(context: wecco.AppContext<Message>): wecco.ElementUpdate {
     return wecco.html`
         <p class="center-align">
-            ${pool.dice.map(d => removeDie(d, context))}
+            ${addDie(DieKind.Ability, context)}
+            ${addDie(DieKind.Proficiency, context)}
+            ${addDie(DieKind.Difficulty, context)}
+            ${addDie(DieKind.Challange, context)}
+            ${addDie(DieKind.Boost, context)}
+            ${addDie(DieKind.Setback, context)}
+            ${addDie(DieKind.Force, context)}
         </p>
+        <p>${m("pool.usage.t")}</p>
+
+    `
+}
+
+function pool(pool: Pool, context: wecco.AppContext<Message>): wecco.ElementUpdate {
+    let body: wecco.ElementUpdate
+
+    if (pool.empty) {
+        body = wecco.html`<p class="center-align empty-pool-message"><em>${m("pool.empty.t")}</em></p>`
+    } else {
+        body = wecco.html`
+            <p class="center-align">
+                ${pool.dice.map(d => removeDie(d, context))}
+            </p>
+        ` 
+    }
+
+    return wecco.html`        
+        ${body}
         <p class="right-align">
-            <a class="btn waves-effect waves-light m-r2 blue-grey lighten-1" @click=${() => context.emit(new EmptyPool())}>${m("pool.emptyPool.t")}</a>
-            <a class="btn waves-effect waves-light m-r2 light-blue darken-4" @click=${() => context.emit(new Roll())}>${m("pool.roll.t")}</a>
+            <a class="btn-flat m-r2 light-blue-text text-darken-4" ?disabled=${pool.empty} @click=${() => context.emit(new EmptyPool())}><i class="material-icons left">delete</i>${m("pool.emptyPool.t")}</a>
+            <a class="btn waves-effect waves-light m-r2 light-blue darken-4" ?disabled=${pool.empty} @click=${() => context.emit(new Roll())}>${m("pool.roll.t")}</a>
         </p>
     `
 }
 
-function result(result: NormalizedPoolResult, context: wecco.AppContext<Message>): wecco.ElementUpdate {
+function result(result: PoolResult, context: wecco.AppContext<Message>): wecco.ElementUpdate {
+    const normalizedResult = result.normalize()
+    const aggregatedResult = result.aggregate()
+
     return wecco.html`
     <div class="col s12 m12 l6">
-        <h2>${m("result.hl")}</h2>
-        <div class="center-align">
-            ${resultIcons(result)}
-            ${resultText(result)}
-        </div>
+        <p class="center-align">
+            ${resultIcons(normalizedResult)}
+            ${resultText(normalizedResult)}
+        </p>
         <div class="right-align">
-            ${isClipboardSupported() ? wecco.html`<a class=""btn waves-effect waves-light m-r2 blue-grey lighten-1" @click=${() => context.emit(new Copy())}><i class="material-icons">content_copy</i></a>` : ""}
-            ${isSharingSupported() ? wecco.html`<a class=""btn waves-effect waves-light m-r2 blue-grey lighten-1" @click=${() => context.emit(new Share())}><i class="material-icons">share</i></a>` : ""}
+            ${isClipboardSupported() ? wecco.html`<a class="btn waves-effect waves-light m-r2 light-blue darken-4" @click=${() => context.emit(new Copy())}><i class="material-icons">content_copy</i></a>` : ""}
+            ${isSharingSupported() ? wecco.html`<a class="btn waves-effect waves-light m-r2 light-blue darken-4" @click=${() => context.emit(new Share())}><i class="material-icons">share</i></a>` : ""}
         </div>
+        <p>${m("result.details")}</p>
+        <p class="center-align aggregated-result">
+            ${resultIcons(aggregatedResult)}
+            <p>${formatPoolResult(aggregatedResult)}</p>
+        </p>
     </div>
     `
 }
 
-function resultText(result: NormalizedPoolResult): wecco.ElementUpdate {
+function resultText(result: AggregatedPoolResult): wecco.ElementUpdate {
     return wecco.html`<p class="flow-text">${formatPoolResult(result)}</p>`
 }
 
-function resultIcons(result: NormalizedPoolResult): wecco.ElementUpdate {
+function resultIcons(result: AggregatedPoolResult): wecco.ElementUpdate {
     const symbols: Array<wecco.ElementUpdate> = []
 
     const contributeIcons = (s: DieSymbol) => {
