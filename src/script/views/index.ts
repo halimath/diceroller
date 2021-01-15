@@ -1,18 +1,16 @@
 import * as wecco from "@wecco/core"
-
-import {AddDie, Copy, EmptyPool, Message, RemoveDie, Roll, Share} from "../control"
-import {Die, DieKind, Model, NormalizedPoolResult, Pool, PoolResult, Symbol} from "../models"
-
-import {version} from "../../package.json"
-import { isClipboardSupported, isSharingSupported } from "src/browser"
-import { m } from "src/utils/i18n"
-import { formatPoolResult } from "src/utils"
+import { version } from "../../../package.json"
+import { isClipboardSupported, isSharingSupported } from "../browser"
+import { AddDie, Copy, EmptyPool, Message, RemoveDie, Roll, Share } from "../control"
+import { Die, DieKind, Model, NormalizedPoolResult, Pool, Symbol } from "../models"
+import { formatPoolResult } from "../utils"
+import { m } from "../utils/i18n"
 
 export function root(model: Model, context: wecco.AppContext<Message>): wecco.ElementUpdate {
     return appShell(wecco.html`
     <div class="row">
         <div class="col s12 m12 l6">
-            <h2>${m("pool.hl")}</h2>
+            <h1>${m("pool.hl")}</h1>
             <p class="center-align">
                 ${addDie(DieKind.Ability, context)}
                 ${addDie(DieKind.Proficiency, context)}
@@ -130,7 +128,12 @@ function appShell(main: wecco.ElementUpdate): wecco.ElementUpdate {
     <header>
         <nav>
             <div class="nav-wrapper blue-grey darken-4">
-                <a class="brand-logo left" href="/">Dice Roller</a>
+                <div class="container">
+                    <a class="brand-logo left" href="/">Dice Roller</a>
+                    <ul class="right">
+                        <li><a href="https://github.com/halimath/diceroller/"><img src="/img/github.png" height="48" alt="github.com/halimath/diceroller"></a></li>
+                    </ul>
+                </div>
             </div>
         </nav>
     </header>
@@ -140,13 +143,10 @@ function appShell(main: wecco.ElementUpdate): wecco.ElementUpdate {
     <footer class="page-footer blue-grey darken-2">
         <div class="container">
             <div class="row">
-                <div class="col s12 m6">
+                <div class="col s12">
                     <p>DiceRoller v${version}</p>
                     <p>Copyright (c) 2020 Alexander Metzner.</p>
-                </div>
-                <div class="col s12 m6 right">
-                    <a href="https://bitbucket.org/halimath/diceroller/src/master/">bitbucket.org/halimath/diceroller</a>
-                </div>
+                </div>                
             </div>
         </div>
     </footer>

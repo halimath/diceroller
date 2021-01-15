@@ -1,7 +1,7 @@
-import { copyTextToClipboard, isClipboardSupported, isSharingSupported, notify, shareText } from "src/browser"
-import { formatPoolResult, poolToUrlHash } from "src/utils"
-import { m } from "src/utils/i18n"
+import { copyTextToClipboard, isClipboardSupported, isSharingSupported, notify, shareText } from "../browser"
 import { Die, DieKind, Model, Pool } from "../models"
+import { formatPoolResult, poolToUrlHash } from "../utils"
+import { m } from "../utils/i18n"
 
 export class AddDie {
     public readonly command = "add-die"

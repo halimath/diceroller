@@ -1,4 +1,4 @@
-import { DieKind, NormalizedPoolResult, Pool, PoolResult, Symbol } from "src/models"
+import { DieKind, NormalizedPoolResult, Pool, Symbol } from "../models"
 import { m, mpl } from "./i18n"
 
 export function poolToUrlHash(p: Pool): string {
