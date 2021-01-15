@@ -1,5 +1,5 @@
 
-export enum Symbol {
+export enum DieSymbol {
     Success = "success",
     Advantage = "advantage",
     Failure = "failure",
@@ -10,7 +10,7 @@ export enum Symbol {
     DarkSide = "darkside",
 }
 
-export type Side = null | Symbol | [Symbol, Symbol]
+export type Side = null | DieSymbol | [DieSymbol, DieSymbol]
 
 export enum DieKind {
     Ability = "ability",
@@ -27,13 +27,13 @@ export class Die {
         return new Die(DieKind.Ability,
             [
                 null,
-                Symbol.Success,
-                [Symbol.Success, Symbol.Success],
-                Symbol.Advantage,
-                [Symbol.Advantage, Symbol.Advantage],
-                Symbol.Success,
-                [Symbol.Advantage, Symbol.Success],
-                Symbol.Advantage,
+                DieSymbol.Success,
+                [DieSymbol.Success, DieSymbol.Success],
+                DieSymbol.Advantage,
+                [DieSymbol.Advantage, DieSymbol.Advantage],
+                DieSymbol.Success,
+                [DieSymbol.Advantage, DieSymbol.Success],
+                DieSymbol.Advantage,
             ])
     }
 
@@ -41,17 +41,17 @@ export class Die {
         return new Die(DieKind.Proficiency,
             [
                 null,
-                Symbol.Success,
-                Symbol.Success,
-                Symbol.Triumph,
-                [Symbol.Success, Symbol.Success],
-                [Symbol.Success, Symbol.Success],
-                [Symbol.Advantage, Symbol.Advantage],
-                [Symbol.Advantage, Symbol.Advantage],
-                Symbol.Advantage,
-                [Symbol.Success, Symbol.Advantage],
-                [Symbol.Success, Symbol.Advantage],
-                [Symbol.Success, Symbol.Advantage],
+                DieSymbol.Success,
+                DieSymbol.Success,
+                DieSymbol.Triumph,
+                [DieSymbol.Success, DieSymbol.Success],
+                [DieSymbol.Success, DieSymbol.Success],
+                [DieSymbol.Advantage, DieSymbol.Advantage],
+                [DieSymbol.Advantage, DieSymbol.Advantage],
+                DieSymbol.Advantage,
+                [DieSymbol.Success, DieSymbol.Advantage],
+                [DieSymbol.Success, DieSymbol.Advantage],
+                [DieSymbol.Success, DieSymbol.Advantage],
             ])
     }
 
@@ -59,13 +59,13 @@ export class Die {
         return new Die(DieKind.Difficulty,
             [
                 null,
-                [Symbol.Failure, Symbol.Failure],
-                Symbol.Threat,
-                [Symbol.Failure, Symbol.Threat],
-                [Symbol.Threat, Symbol.Threat],
-                Symbol.Threat,
-                Symbol.Failure,
-                Symbol.Threat,
+                [DieSymbol.Failure, DieSymbol.Failure],
+                DieSymbol.Threat,
+                [DieSymbol.Failure, DieSymbol.Threat],
+                [DieSymbol.Threat, DieSymbol.Threat],
+                DieSymbol.Threat,
+                DieSymbol.Failure,
+                DieSymbol.Threat,
             ])
     }
 
@@ -74,17 +74,17 @@ export class Die {
             [
 
                 null,
-                Symbol.Failure,
-                Symbol.Failure,
-                Symbol.Threat,
-                Symbol.Threat,
-                Symbol.Despair,
-                [Symbol.Threat, Symbol.Threat],
-                [Symbol.Threat, Symbol.Threat],
-                [Symbol.Failure, Symbol.Failure],
-                [Symbol.Failure, Symbol.Failure],
-                [Symbol.Failure, Symbol.Threat],
-                [Symbol.Failure, Symbol.Threat],
+                DieSymbol.Failure,
+                DieSymbol.Failure,
+                DieSymbol.Threat,
+                DieSymbol.Threat,
+                DieSymbol.Despair,
+                [DieSymbol.Threat, DieSymbol.Threat],
+                [DieSymbol.Threat, DieSymbol.Threat],
+                [DieSymbol.Failure, DieSymbol.Failure],
+                [DieSymbol.Failure, DieSymbol.Failure],
+                [DieSymbol.Failure, DieSymbol.Threat],
+                [DieSymbol.Failure, DieSymbol.Threat],
             ])
     }
 
@@ -93,10 +93,10 @@ export class Die {
             [
                 null,
                 null,
-                Symbol.Success,
-                Symbol.Advantage,
-                [Symbol.Success, Symbol.Advantage],
-                [Symbol.Advantage, Symbol.Advantage],
+                DieSymbol.Success,
+                DieSymbol.Advantage,
+                [DieSymbol.Success, DieSymbol.Advantage],
+                [DieSymbol.Advantage, DieSymbol.Advantage],
             ])
     }
 
@@ -105,28 +105,28 @@ export class Die {
             [
                 null,
                 null,
-                Symbol.Failure,
-                Symbol.Failure,
-                Symbol.Threat,
-                Symbol.Threat,
+                DieSymbol.Failure,
+                DieSymbol.Failure,
+                DieSymbol.Threat,
+                DieSymbol.Threat,
             ])
     }
 
     static get Force(): Die {
         return new Die(DieKind.Force,
             [
-                Symbol.LightSide,
-                Symbol.LightSide,
-                Symbol.DarkSide,
-                Symbol.DarkSide,
-                Symbol.DarkSide,
-                Symbol.DarkSide,
-                Symbol.DarkSide,
-                Symbol.DarkSide,
-                [Symbol.LightSide, Symbol.LightSide],
-                [Symbol.LightSide, Symbol.LightSide],
-                [Symbol.LightSide, Symbol.LightSide],
-                [Symbol.DarkSide, Symbol.DarkSide],
+                DieSymbol.LightSide,
+                DieSymbol.LightSide,
+                DieSymbol.DarkSide,
+                DieSymbol.DarkSide,
+                DieSymbol.DarkSide,
+                DieSymbol.DarkSide,
+                DieSymbol.DarkSide,
+                DieSymbol.DarkSide,
+                [DieSymbol.LightSide, DieSymbol.LightSide],
+                [DieSymbol.LightSide, DieSymbol.LightSide],
+                [DieSymbol.LightSide, DieSymbol.LightSide],
+                [DieSymbol.DarkSide, DieSymbol.DarkSide],
             ])
     }
 
@@ -151,7 +151,7 @@ export class DieResult {
         return new DieResult([])
     }
 
-    constructor(public readonly symbols: Array<Symbol>) { }
+    constructor(public readonly symbols: Array<DieSymbol>) { }
 }
 
 export class Pool {
@@ -183,8 +183,7 @@ export class Pool {
     }
 }
 
-export interface NormalizedPoolResult extends Record<Symbol, number> {
-}
+export type NormalizedPoolResult = Record<DieSymbol, number>
 
 export class PoolResult {
     constructor(public readonly dieResults: Array<DieResult>) {}
@@ -192,19 +191,19 @@ export class PoolResult {
     normalize(): NormalizedPoolResult {
         const aggregates = this.aggregate()
         
-        const tmp: {[key in Symbol]?: number} = {}
-        tmp[Symbol.Success] = 0
-        tmp[Symbol.Advantage] = 0
-        tmp[Symbol.Triumph] = 0
-        tmp[Symbol.Failure] = 0
-        tmp[Symbol.Threat] = 0
-        tmp[Symbol.Despair] = 0
-        tmp[Symbol.LightSide] = 0
-        tmp[Symbol.DarkSide] = 0
+        const tmp: {[key in DieSymbol]?: number} = {}
+        tmp[DieSymbol.Success] = 0
+        tmp[DieSymbol.Advantage] = 0
+        tmp[DieSymbol.Triumph] = 0
+        tmp[DieSymbol.Failure] = 0
+        tmp[DieSymbol.Threat] = 0
+        tmp[DieSymbol.Despair] = 0
+        tmp[DieSymbol.LightSide] = 0
+        tmp[DieSymbol.DarkSide] = 0
 
         const result = tmp as NormalizedPoolResult
 
-        const applyDelta = (left: Symbol, right: Symbol) => {
+        const applyDelta = (left: DieSymbol, right: DieSymbol) => {
             if (aggregates[left] > aggregates[right]) {
                 result[left] = aggregates[left] - aggregates[right]
             } else if (aggregates[left] < aggregates[right]) {
@@ -212,24 +211,24 @@ export class PoolResult {
             }            
         }
 
-        const copyPositive = (s: Symbol) => {
+        const copyPositive = (s: DieSymbol) => {
             if (aggregates[s] > 0) {
                 result[s]  = aggregates[s]
             }
         }
 
-        applyDelta(Symbol.Success, Symbol.Failure)
-        applyDelta(Symbol.Advantage, Symbol.Threat)
+        applyDelta(DieSymbol.Success, DieSymbol.Failure)
+        applyDelta(DieSymbol.Advantage, DieSymbol.Threat)
 
-        copyPositive(Symbol.Triumph)
-        copyPositive(Symbol.Despair)
-        copyPositive(Symbol.LightSide)
-        copyPositive(Symbol.DarkSide)
+        copyPositive(DieSymbol.Triumph)
+        copyPositive(DieSymbol.Despair)
+        copyPositive(DieSymbol.LightSide)
+        copyPositive(DieSymbol.DarkSide)
 
         return result
     }
 
-    private aggregate(): {[key in Symbol]: number} {
+    private aggregate(): {[key in DieSymbol]: number} {
         const result = {
             success: 0,
             advantage: 0,
@@ -245,10 +244,10 @@ export class PoolResult {
             .flatMap(r => r.symbols)
             .map(s => {
                 result[s]++
-                if (s === Symbol.Triumph) {
-                    result[Symbol.Success]++
-                } else if (s === Symbol.Despair) {
-                    result[Symbol.Failure]++
+                if (s === DieSymbol.Triumph) {
+                    result[DieSymbol.Success]++
+                } else if (s === DieSymbol.Despair) {
+                    result[DieSymbol.Failure]++
                 }
             })
 

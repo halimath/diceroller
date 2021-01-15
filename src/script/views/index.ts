@@ -2,7 +2,7 @@ import * as wecco from "@wecco/core"
 import { version } from "../../../package.json"
 import { isClipboardSupported, isSharingSupported } from "../browser"
 import { AddDie, Copy, EmptyPool, Message, RemoveDie, Roll, Share } from "../control"
-import { Die, DieKind, Model, NormalizedPoolResult, Pool, Symbol } from "../models"
+import { Die, DieKind, Model, NormalizedPoolResult, Pool, DieSymbol } from "../models"
 import { formatPoolResult } from "../utils"
 import { m } from "../utils/i18n"
 
@@ -67,25 +67,25 @@ function resultText(result: NormalizedPoolResult): wecco.ElementUpdate {
 function resultIcons(result: NormalizedPoolResult): wecco.ElementUpdate {
     const symbols: Array<wecco.ElementUpdate> = []
 
-    const contributeIcons = (s: Symbol) => {
+    const contributeIcons = (s: DieSymbol) => {
         for (let i = 0; i < (result[s] ?? 0); i++) {
             symbols.push(symbolIcon(s))
         }
     }
 
-    contributeIcons(Symbol.Success)
-    contributeIcons(Symbol.Advantage)
-    contributeIcons(Symbol.Triumph)
-    contributeIcons(Symbol.Failure)
-    contributeIcons(Symbol.Threat)
-    contributeIcons(Symbol.Despair)
-    contributeIcons(Symbol.LightSide)
-    contributeIcons(Symbol.DarkSide)
+    contributeIcons(DieSymbol.Success)
+    contributeIcons(DieSymbol.Advantage)
+    contributeIcons(DieSymbol.Triumph)
+    contributeIcons(DieSymbol.Failure)
+    contributeIcons(DieSymbol.Threat)
+    contributeIcons(DieSymbol.Despair)
+    contributeIcons(DieSymbol.LightSide)
+    contributeIcons(DieSymbol.DarkSide)
 
     return wecco.html`${symbols}`
 }
 
-function symbolIcon (s: Symbol): wecco.ElementUpdate {
+function symbolIcon (s: DieSymbol): wecco.ElementUpdate {
     return wecco.html`<svg class="roll-icon" xmlns="http://www.w3.org/2000/svg"><use href="#icon-${s}" xmlns="http://www.w3.org/2000/svg"></use></svg>`
 }
 

@@ -1,13 +1,11 @@
+/// </// <reference path="./materialize.d.ts" />
 
-declare namespace M {
-    function toast(message: {html: string}): void
-}
 
 export function isSharingSupported(): boolean {
     return typeof (navigator.share) === "function"
 }
 
-export async function shareText(text: string) {
+export async function shareText(text: string): Promise<void> {
     if (!isSharingSupported) {
         return Promise.reject("sharing is not supported")
     }
@@ -28,6 +26,6 @@ export function copyTextToClipboard(text: string): Promise<void> {
     return navigator.clipboard.writeText(text)
 }
 
-export function notify(message: string) {
+export function notify(message: string): void {
     M.toast({ html: message })
 }

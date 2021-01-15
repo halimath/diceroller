@@ -1,4 +1,4 @@
-import { DieKind, NormalizedPoolResult, Pool, Symbol } from "../models"
+import { DieKind, NormalizedPoolResult, Pool, DieSymbol } from "../models"
 import { m, mpl } from "./i18n"
 
 export function poolToUrlHash(p: Pool): string {
@@ -34,57 +34,57 @@ export function charToDieKind(c: string): DieKind {
 export function formatPoolResult (r: NormalizedPoolResult): string {
     let s = ""
     
-    if ((r[Symbol.Success] ?? 0) > 0) {
-        s += mpl("result.success.t", r[Symbol.Success])
+    if ((r[DieSymbol.Success] ?? 0) > 0) {
+        s += mpl("result.success.t", r[DieSymbol.Success])
     }
 
-    if ((r[Symbol.Advantage] ?? 0) > 0) {
+    if ((r[DieSymbol.Advantage] ?? 0) > 0) {
         if (s.length > 0) {
             s += ", "
         }
-        s += mpl("result.advantage.t", r[Symbol.Advantage])
+        s += mpl("result.advantage.t", r[DieSymbol.Advantage])
     }
 
-    if ((r[Symbol.Triumph] ?? 0) > 0) {
+    if ((r[DieSymbol.Triumph] ?? 0) > 0) {
         if (s.length > 0) {
             s += ", "
         }
-        s += mpl("result.triumph.t", r[Symbol.Triumph])
+        s += mpl("result.triumph.t", r[DieSymbol.Triumph])
     }
 
-    if ((r[Symbol.Failure] ?? 0) > 0) {
+    if ((r[DieSymbol.Failure] ?? 0) > 0) {
         if (s.length > 0) {
             s += ", "
         }
-        s += mpl("result.failure.t", r[Symbol.Failure])
+        s += mpl("result.failure.t", r[DieSymbol.Failure])
     }
 
-    if ((r[Symbol.Threat] ?? 0) > 0) {
+    if ((r[DieSymbol.Threat] ?? 0) > 0) {
         if (s.length > 0) {
             s += ", "
         }
-        s += mpl("result.threat.t", r[Symbol.Threat])
+        s += mpl("result.threat.t", r[DieSymbol.Threat])
     }
 
-    if ((r[Symbol.Despair] ?? 0) > 0) {
+    if ((r[DieSymbol.Despair] ?? 0) > 0) {
         if (s.length > 0) {
             s += ", "
         }
-        s += mpl("result.despair.t", r[Symbol.Despair])
+        s += mpl("result.despair.t", r[DieSymbol.Despair])
     }
 
-    if ((r[Symbol.LightSide] ?? 0) > 0) {
+    if ((r[DieSymbol.LightSide] ?? 0) > 0) {
         if (s.length > 0) {
             s += ", "
         }
-        s += mpl("result.lightside.t", r[Symbol.LightSide])
+        s += mpl("result.lightside.t", r[DieSymbol.LightSide])
     }
 
-    if ((r[Symbol.DarkSide] ?? 0) > 0) {
+    if ((r[DieSymbol.DarkSide] ?? 0) > 0) {
         if (s.length > 0) {
             s += ", "
         }
-        s += mpl("result.darkside.t", r[Symbol.DarkSide])
+        s += mpl("result.darkside.t", r[DieSymbol.DarkSide])
     }
 
     if (s.length === 0) {
