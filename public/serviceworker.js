@@ -1,6 +1,6 @@
 console.log("Service worker");
 
-const CacheVersion = 3;
+const CacheVersion = 5;
 const CacheName = `diceroller-cache-v${CacheVersion}`;
 
 self.addEventListener("install", e => {
