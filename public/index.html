@@ -166,31 +166,7 @@
     </defs>
   </svg>
 
-  <script>
-    window.SharingWrapper = {
-      canShare() {
-        return typeof (navigator.share) === "function";
-      },
-
-      async shareText(text) {
-        console.log("Sharing", text);
-        if (!this.canShare()) {
-          return Promise.reject("sharing is not supported");
-        }
-
-        return navigator.share({
-          text: text,
-        });
-      }
-    };
-
-    function notify(message) {
-      M.toast({ html: message });
-    }
-  </script>
-
-  <script src="diceroller.js">
-  </script>
+  <script src="diceroller.js"></script>
 
   <script>
     if ("serviceWorker" in navigator) {
