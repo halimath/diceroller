@@ -5,6 +5,10 @@ import {Model, Pool} from "./models"
 import { charToDieKind } from "./utils"
 import {root} from "./views"
 
+import "../styles/index.sass"
+
+import "materialize-css"
+
 document.addEventListener("DOMContentLoaded", () => {
     const context = wecco.app(() => new Model(Pool.empty()), update, root, "#app")
     if (document.location.hash.length > 0) {

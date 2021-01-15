@@ -2,7 +2,7 @@ const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin")
 
 module.exports = {
     mode: "development",
-    entry: "./src/index.ts",
+    entry: "./src/script/index.ts",
     output: {
         filename: "diceroller.js"
     },
@@ -12,7 +12,15 @@ module.exports = {
                 test: /\.ts$/,
                 exclude: /node_modules/,
                 use: "ts-loader"
-            }
+            },
+            {
+                test: /\.s[ac]ss$/i,
+                use: [
+                    "style-loader",
+                    "css-loader",
+                    "sass-loader",
+                ],
+            }            
         ]
     },
     resolve: {
