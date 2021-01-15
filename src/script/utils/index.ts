@@ -1,4 +1,4 @@
-import { DieKind, NormalizedPoolResult, Pool, DieSymbol } from "../models"
+import { DieKind, AggregatedPoolResult, Pool, DieSymbol } from "../models"
 import { m, mpl } from "./i18n"
 
 export function poolToUrlHash(p: Pool): string {
@@ -31,7 +31,7 @@ export function charToDieKind(c: string): DieKind {
     }
 }
 
-export function formatPoolResult (r: NormalizedPoolResult): string {
+export function formatPoolResult (r: AggregatedPoolResult): string {
     let s = ""
     
     if ((r[DieSymbol.Success] ?? 0) > 0) {

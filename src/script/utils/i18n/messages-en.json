@@ -1,11 +1,8 @@
 {
-    "pool.hl": "Pool",
     "pool.usage.t": "Tap a small die above to add it to the pool. Tap a die from the pool below to remove it.",
     "pool.empty.t": "Empty pool",
     "pool.emptyPool.t": "Empty Pool",
     "pool.roll.t": "Roll",
-
-    "result.hl": "Result",
 
     "result.blank.t": "Blank",
     "result.success.t.1": "1 Success",
@@ -24,6 +21,8 @@
     "result.lightside.t.n": "%d Light Sides",
     "result.darkside.t.1": "1 Dark Side",
     "result.darkside.t.n": "%d Dark Sides",
+
+    "result.details": "Find all symbols shown an the dice rolled below.",
 
     "result.copied.t": "Copied to clipboard"
 }

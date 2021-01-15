@@ -183,12 +183,12 @@ export class Pool {
     }
 }
 
-export type NormalizedPoolResult = Record<DieSymbol, number>
+export type AggregatedPoolResult = Record<DieSymbol, number>
 
 export class PoolResult {
     constructor(public readonly dieResults: Array<DieResult>) {}
 
-    normalize(): NormalizedPoolResult {
+    normalize(): AggregatedPoolResult {
         const aggregates = this.aggregate()
         
         const tmp: {[key in DieSymbol]?: number} = {}
@@ -201,7 +201,7 @@ export class PoolResult {
         tmp[DieSymbol.LightSide] = 0
         tmp[DieSymbol.DarkSide] = 0
 
-        const result = tmp as NormalizedPoolResult
+        const result = tmp as AggregatedPoolResult
 
         const applyDelta = (left: DieSymbol, right: DieSymbol) => {
             if (aggregates[left] > aggregates[right]) {
@@ -228,7 +228,7 @@ export class PoolResult {
         return result
     }
 
-    private aggregate(): {[key in DieSymbol]: number} {
+    aggregate(): AggregatedPoolResult {
         const result = {
             success: 0,
             advantage: 0,
