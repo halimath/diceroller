@@ -1,4 +1,4 @@
-const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin")
+const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
 
 module.exports = {
     mode: "development",
@@ -33,4 +33,4 @@ module.exports = {
         compress: true,
         port: 9999,
     }
-}
+};
