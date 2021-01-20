@@ -1,4 +1,14 @@
 {
+    "die.d10": "D10",
+    "die.d100": "D100",
+    "die.ability.initial": "A",
+    "die.proficiency.initial": "P",
+    "die.difficulty.initial": "D",
+    "die.challange.initial": "C",
+    "die.boost.initial": "B",
+    "die.setback.initial": "S",
+    "die.force.initial": "F",
+
     "pool.usage.t": "Tap a small die above to add it to the pool. Tap a die from the pool below to remove it.",
     "pool.empty.t": "Empty pool",
     "pool.emptyPool.t": "Empty Pool",
@@ -24,5 +34,5 @@
 
     "result.details": "Find all symbols shown an the dice rolled below.",
 
-    "result.copied.t": "Copied to clipboard"
+    "result.copied.t": "Copied to clipboard" 
 }

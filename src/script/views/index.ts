@@ -1,8 +1,8 @@
 import * as wecco from "@wecco/core"
 import { version } from "../../../package.json"
 import { isClipboardSupported, isSharingSupported } from "../browser"
-import { AddDie, Copy, EmptyPool, Message, RemoveDie, Roll, Share } from "../control"
-import { Die, DieKind, Model, AggregatedPoolResult, Pool, DieSymbol, PoolResult } from "../models"
+import { AddDie, Copy, EmptyPool, Message, RemoveDie, RemoveNumericResult, RollNumeric, RollPool, Share } from "../control"
+import { Die, DieKind, Model, AggregatedPoolResult, Pool, DieSymbol, PoolResult, NumericDieKind, NumericDieResult } from "../models"
 import { formatPoolResult } from "../utils"
 import { m } from "../utils/i18n"
 
@@ -11,10 +11,24 @@ export function root(model: Model, context: wecco.AppContext<Message>): wecco.El
     <div class="row">
         <div class="col s12 m12 l6">
             ${pool(model.pool, context)}
-            <hr>
+            <hr />
             ${toolbar(context)}
+            <hr />
+            <div class="row">
+
+                <div class="col">
+                    ${addNumericDie(NumericDieKind.D10, context)}
+                    ${addNumericDie(NumericDieKind.D100, context)}
+                </div>
+                <div class="col center-align">
+                    ${model.numericDieResult ? numericResult(model.numericDieResult, context) : ""}
+                </div>
+            </div>
         </div>
+      
         ${model.poolResult ? result(model.poolResult, context) : ""}
+
+        
     </div>
     `)
 }
@@ -22,11 +36,11 @@ export function root(model: Model, context: wecco.AppContext<Message>): wecco.El
 function toolbar(context: wecco.AppContext<Message>): wecco.ElementUpdate {
     return wecco.html`
         <p class="center-align">
-            ${addDie(DieKind.Ability, context)}
             ${addDie(DieKind.Proficiency, context)}
+            ${addDie(DieKind.Ability, context)}
+            ${addDie(DieKind.Boost, context)}
             ${addDie(DieKind.Difficulty, context)}
             ${addDie(DieKind.Challange, context)}
-            ${addDie(DieKind.Boost, context)}
             ${addDie(DieKind.Setback, context)}
             ${addDie(DieKind.Force, context)}
         </p>
@@ -52,7 +66,7 @@ function pool(pool: Pool, context: wecco.AppContext<Message>): wecco.ElementUpda
         ${body}
         <p class="right-align">
             <a class="btn-flat m-r2 light-blue-text text-darken-4" ?disabled=${pool.empty} @click=${() => context.emit(new EmptyPool())}><i class="material-icons left">delete</i>${m("pool.emptyPool.t")}</a>
-            <a class="btn waves-effect waves-light m-r2 light-blue darken-4" ?disabled=${pool.empty} @click=${() => context.emit(new Roll())}>${m("pool.roll.t")}</a>
+            <a class="btn waves-effect waves-light m-r2 light-blue darken-4" ?disabled=${pool.empty} @click=${() => context.emit(new RollPool())}>${m("pool.roll.t")}</a>
         </p>
     `
 }
@@ -76,6 +90,15 @@ function result(result: PoolResult, context: wecco.AppContext<Message>): wecco.E
             ${resultIcons(aggregatedResult)}
             <p>${formatPoolResult(aggregatedResult)}</p>
         </p>
+    </div>
+    `
+}
+
+function numericResult(result: NumericDieResult, context: wecco.AppContext<Message> ): wecco.ElementUpdate {
+    return wecco.html`
+    <div class="chip minw-2 center-align">
+        ${result.value}
+        <i class="remove-numeric-result material-icons" @click=${() => context.emit(new RemoveNumericResult())}>delete</i>
     </div>
     `
 }
@@ -119,27 +142,43 @@ function addDie(die: DieKind, context: wecco.AppContext<Message>): wecco.Element
 }
 
 function dieButton(die: DieKind, additionalStyleClasses: string, msg: Message, context: wecco.AppContext<Message>): wecco.ElementUpdate {
-    const [styleClasses, label] = determineButtonStyle(die)
-    return wecco.html`<button class="btn waves-effect waves-light m-r2 ${styleClasses} ${additionalStyleClasses}" @click=${() => context.emit(msg)}>${label}</button>`
+    const [styleClasses, labelKey] = determineButtonStyle(die)
+    return wecco.html`<button class="btn waves-effect waves-light m-r2 ${styleClasses} ${additionalStyleClasses}" @click=${() => context.emit(msg)}>${m(labelKey)}</button>`
 
 }
+
+function addNumericDie(numericDieKind: NumericDieKind,context: wecco.AppContext<Message>): wecco.ElementUpdate {
+    const [styleClasses, labelKey]= determineNumericStyle(numericDieKind)
+
+    return wecco.html`<button class="btn waves-effect waves-light m-r2 ${styleClasses}" @click=${() => context.emit(new RollNumeric(numericDieKind))}>${m(labelKey)}</button>`
+}
+
+function determineNumericStyle(numericDieKind: NumericDieKind):[string,string] {
+    switch(numericDieKind) {
+        case NumericDieKind.D10:
+            return ["indigo", "die.d10"]
+        case NumericDieKind.D100:
+            return ["deep-orange darken-4", "die.d100"]
+    }
+}
+
 
 function determineButtonStyle(die: DieKind): [string, string] {
     switch (die) {
         case DieKind.Ability:
-            return ["green", "A"]
+            return ["green", "die.ability.initial"]
         case DieKind.Proficiency:
-            return ["yellow black-text", "P"]
+            return ["yellow black-text", "die.proficiency.initial"]
         case DieKind.Difficulty:
-            return ["purple darken-3", "D"]
+            return ["purple darken-3", "die.difficulty.initial"]
         case DieKind.Challange:
-            return ["red", "C"]
+            return ["red", "die.challange.initial"]
         case DieKind.Boost:
-            return ["blue lighten-2 black-text", "B"]
+            return ["blue lighten-2 black-text", "die.boost.initial"]
         case DieKind.Setback:
-            return ["black", "S"]
+            return ["black", "die.setback.initial"]
         case DieKind.Force:
-            return ["white black-text", "F"]
+            return ["white black-text", "die.force.initial"]
     }
 }
 
