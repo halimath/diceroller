@@ -188,8 +188,8 @@ export class Pool {
     }
 
     sort(order = DieKindOrder): Pool {
-        this.dice.sort((a, b) => order.indexOf(a.kind) - order.indexOf(b.kind))
-        return this
+        const sortedDice = this.dice.sort((a, b) => order.indexOf(a.kind) - order.indexOf(b.kind))
+        return new Pool(sortedDice)
     }
 
     roll(): PoolResult {
