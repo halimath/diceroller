@@ -8,28 +8,27 @@ import { m } from "../utils/i18n"
 
 export function root(model: Model, context: wecco.AppContext<Message>): wecco.ElementUpdate {
     return appShell(wecco.html`
+    
     <div class="row">
         <div class="col s12 m12 l6">
             ${pool(model.pool, context)}
             <hr />
             ${toolbar(context)}
-            <hr />
-            <div class="row">
-
-                <div class="col">
-                    ${addNumericDie(NumericDieKind.D10, context)}
-                    ${addNumericDie(NumericDieKind.D100, context)}
-                </div>
-                <div class="col center-align">
-                    ${model.numericDieResult ? numericResult(model.numericDieResult, context) : ""}
-                </div>
-            </div>
         </div>
-      
+    
         ${model.poolResult ? result(model.poolResult, context) : ""}
-
-        
     </div>
+    
+    <div class="row">
+        <div class="col s12 m12 l6">
+            <hr />
+            ${addNumericDie(NumericDieKind.D10, context)}
+            ${addNumericDie(NumericDieKind.D100, context)}
+    
+            ${model.numericDieResult ? numericResult(model.numericDieResult, context) : ""}
+        </div>
+    </div>
+
     `)
 }
 
@@ -59,14 +58,16 @@ function pool(pool: Pool, context: wecco.AppContext<Message>): wecco.ElementUpda
             <p class="center-align">
                 ${pool.dice.map(d => removeDie(d, context))}
             </p>
-        ` 
+        `
     }
 
     return wecco.html`        
         ${body}
         <p class="right-align">
-            <a class="btn-flat m-r2 light-blue-text text-darken-4" ?disabled=${pool.empty} @click=${() => context.emit(new EmptyPool())}><i class="material-icons left">delete</i>${m("pool.emptyPool.t")}</a>
-            <a class="btn waves-effect waves-light m-r2 light-blue darken-4" ?disabled=${pool.empty} @click=${() => context.emit(new RollPool())}>${m("pool.roll.t")}</a>
+            <a class="btn-flat m-r2 light-blue-text text-darken-4" ?disabled=${pool.empty} @click=${()=> context.emit(new
+                EmptyPool())}><i class="material-icons left">delete</i>${m("pool.emptyPool.t")}</a>
+            <a class="btn waves-effect waves-light m-r2 light-blue darken-4" ?disabled=${pool.empty} @click=${()=>
+                context.emit(new RollPool())}>${m("pool.roll.t")}</a>
         </p>
     `
 }
@@ -82,8 +83,10 @@ function result(result: PoolResult, context: wecco.AppContext<Message>): wecco.E
             ${resultText(normalizedResult)}
         </p>
         <div class="right-align">
-            ${isClipboardSupported() ? wecco.html`<a class="btn waves-effect waves-light m-r2 light-blue darken-4" @click=${() => context.emit(new Copy())}><i class="material-icons">content_copy</i></a>` : ""}
-            ${isSharingSupported() ? wecco.html`<a class="btn waves-effect waves-light m-r2 light-blue darken-4" @click=${() => context.emit(new Share())}><i class="material-icons">share</i></a>` : ""}
+            ${isClipboardSupported() ? wecco.html`<a class="btn waves-effect waves-light m-r2 light-blue darken-4"
+                @click=${()=> context.emit(new Copy())}><i class="material-icons">content_copy</i></a>` : ""}
+            ${isSharingSupported() ? wecco.html`<a class="btn waves-effect waves-light m-r2 light-blue darken-4"
+                @click=${()=> context.emit(new Share())}><i class="material-icons">share</i></a>` : ""}
         </div>
         <p>${m("result.details")}</p>
         <p class="center-align aggregated-result">
@@ -94,12 +97,15 @@ function result(result: PoolResult, context: wecco.AppContext<Message>): wecco.E
     `
 }
 
-function numericResult(result: NumericDieResult, context: wecco.AppContext<Message> ): wecco.ElementUpdate {
+function numericResult(result: NumericDieResult, context: wecco.AppContext<Message>): wecco.ElementUpdate {
     return wecco.html`
-    <div class="chip minw-2 center-align">
-        ${result.value}
-        <i class="remove-numeric-result material-icons" @click=${() => context.emit(new RemoveNumericResult())}>delete</i>
-    </div>
+    <p>
+        <div class="chip minw-2 center-align">
+            ${result.value}
+            <i class="remove-numeric-result material-icons" @click=${()=> context.emit(new
+        RemoveNumericResult())}>delete</i>
+        </div>
+    </p>
     `
 }
 
@@ -128,8 +134,10 @@ function resultIcons(result: AggregatedPoolResult): wecco.ElementUpdate {
     return wecco.html`${symbols}`
 }
 
-function symbolIcon (s: DieSymbol): wecco.ElementUpdate {
-    return wecco.html`<svg class="roll-icon" xmlns="http://www.w3.org/2000/svg"><use href="#icon-${s}" xmlns="http://www.w3.org/2000/svg"></use></svg>`
+function symbolIcon(s: DieSymbol): wecco.ElementUpdate {
+    return wecco.html`<svg class="roll-icon" xmlns="http://www.w3.org/2000/svg">
+    <use href="#icon-${s}" xmlns="http://www.w3.org/2000/svg"></use>
+</svg>`
 }
 
 
@@ -143,18 +151,20 @@ function addDie(die: DieKind, context: wecco.AppContext<Message>): wecco.Element
 
 function dieButton(die: DieKind, additionalStyleClasses: string, msg: Message, context: wecco.AppContext<Message>): wecco.ElementUpdate {
     const [styleClasses, labelKey] = determineButtonStyle(die)
-    return wecco.html`<button class="btn waves-effect waves-light m-r2 ${styleClasses} ${additionalStyleClasses}" @click=${() => context.emit(msg)}>${m(labelKey)}</button>`
+    return wecco.html`<button class="btn waves-effect waves-light m-r2 ${styleClasses} ${additionalStyleClasses}" @click=${()=>
+    context.emit(msg)}>${m(labelKey)}</button>`
 
 }
 
-function addNumericDie(numericDieKind: NumericDieKind,context: wecco.AppContext<Message>): wecco.ElementUpdate {
-    const [styleClasses, labelKey]= determineNumericStyle(numericDieKind)
+function addNumericDie(numericDieKind: NumericDieKind, context: wecco.AppContext<Message>): wecco.ElementUpdate {
+    const [styleClasses, labelKey] = determineNumericStyle(numericDieKind)
 
-    return wecco.html`<button class="btn waves-effect waves-light m-r2 ${styleClasses}" @click=${() => context.emit(new RollNumeric(numericDieKind))}>${m(labelKey)}</button>`
+    return wecco.html`<button class="btn waves-effect waves-light m-r2 ${styleClasses}" @click=${()=> context.emit(new
+    RollNumeric(numericDieKind))}>${m(labelKey)}</button>`
 }
 
-function determineNumericStyle(numericDieKind: NumericDieKind):[string,string] {
-    switch(numericDieKind) {
+function determineNumericStyle(numericDieKind: NumericDieKind): [string, string] {
+    switch (numericDieKind) {
         case NumericDieKind.D10:
             return ["indigo", "die.d10"]
         case NumericDieKind.D100:
@@ -190,14 +200,15 @@ function appShell(main: wecco.ElementUpdate): wecco.ElementUpdate {
                 <div class="container">
                     <a class="brand-logo left" href="/">Dice Roller</a>
                     <ul class="right">
-                        <li><a href="https://github.com/halimath/diceroller/"><img src="/img/github.png" height="48" alt="github.com/halimath/diceroller"></a></li>
+                        <li><a href="https://github.com/halimath/diceroller/"><img src="/img/github.png" height="48"
+                                    alt="github.com/halimath/diceroller"></a></li>
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
     <main>
-        <div class="container">${main}</div>        
+        <div class="container">${main}</div>
     </main>
     <footer class="page-footer blue-grey darken-2">
         <div class="container">
@@ -205,7 +216,7 @@ function appShell(main: wecco.ElementUpdate): wecco.ElementUpdate {
                 <div class="col s12">
                     <p>DiceRoller v${version}</p>
                     <p>Copyright (c) 2020 Alexander Metzner.</p>
-                </div>                
+                </div>
             </div>
         </div>
     </footer>
