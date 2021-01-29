@@ -22,6 +22,16 @@ export enum DieKind {
     Force = "force",
 }
 
+export const DieKindOrder = [
+    DieKind.Proficiency,
+    DieKind.Ability,
+    DieKind.Boost,
+    DieKind.Challange,
+    DieKind.Difficulty,
+    DieKind.Setback,
+    DieKind.Force
+]
+
 export class Die {
     static get Ability(): Die {
         return new Die(DieKind.Ability,
@@ -159,23 +169,27 @@ export class Pool {
         return new Pool([])
     }
 
-    constructor (public readonly dice: Array<Die>){}
+    constructor(public readonly dice: Array<Die>) { }
 
     get empty(): boolean {
         return this.dice.length === 0
     }
 
-    addDie (die: Die): Pool {
+    addDie(die: Die): Pool {
         const dice = [...(this.dice)]
         dice.push(die)
-        // TODO: Sort pool
-        return new Pool(dice)
+        return new Pool(dice).sort()
     }
 
-    removeDie (die: Die): Pool {
+    removeDie(die: Die): Pool {
         const dice = [...(this.dice)]
         dice.splice(dice.indexOf(die), 1)
         return new Pool(dice)
+    }
+
+    sort(order = DieKindOrder): Pool {
+        this.dice.sort((a, b) => order.indexOf(a.kind) - order.indexOf(b.kind))
+        return this
     }
 
     roll(): PoolResult {
@@ -186,12 +200,12 @@ export class Pool {
 export type AggregatedPoolResult = Record<DieSymbol, number>
 
 export class PoolResult {
-    constructor(public readonly dieResults: Array<DieResult>) {}
+    constructor(public readonly dieResults: Array<DieResult>) { }
 
     normalize(): AggregatedPoolResult {
         const aggregates = this.aggregate()
-        
-        const tmp: {[key in DieSymbol]?: number} = {}
+
+        const tmp: { [key in DieSymbol]?: number } = {}
         tmp[DieSymbol.Success] = 0
         tmp[DieSymbol.Advantage] = 0
         tmp[DieSymbol.Triumph] = 0
@@ -208,12 +222,12 @@ export class PoolResult {
                 result[left] = aggregates[left] - aggregates[right]
             } else if (aggregates[left] < aggregates[right]) {
                 result[right] = aggregates[right] - aggregates[left]
-            }            
+            }
         }
 
         const copyPositive = (s: DieSymbol) => {
             if (aggregates[s] > 0) {
-                result[s]  = aggregates[s]
+                result[s] = aggregates[s]
             }
         }
 
@@ -255,6 +269,6 @@ export class PoolResult {
     }
 }
 
-export class Model { 
-    constructor (public readonly pool: Pool, public readonly poolResult?: PoolResult) {}
+export class Model {
+    constructor(public readonly pool: Pool, public readonly poolResult?: PoolResult) { }
 }

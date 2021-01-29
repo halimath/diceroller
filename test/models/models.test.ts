@@ -1,6 +1,6 @@
 import { expect } from "chai"
 
-import { Die, DieResult, Pool, PoolResult, DieSymbol } from "../../src/script/models"
+import { Die, DieResult, Pool, PoolResult, DieSymbol, DieKind } from "../../src/script/models"
 
 describe("Models", () => {
     describe("Die", () => {
@@ -18,6 +18,37 @@ describe("Models", () => {
                 const pool = new Pool([Die.Ability, Die.Ability, Die.Difficulty])
                 const result = pool.roll()
                 expect(result.dieResults.length).to.equal(3)
+            })
+        })
+        describe("addDie", () => {
+            it("should add die to pool", () => {
+                const pool = new Pool([]).addDie(Die.Ability)
+                expect(pool.dice).to.deep.equal([Die.Ability])
+            })
+            it("should be sorted", () => {
+                const pool = new Pool([])
+                    .addDie(Die.Force)
+                    .addDie(Die.Setback)
+                    .addDie(Die.Difficulty)
+                    .addDie(Die.Challange)
+                    .addDie(Die.Boost)
+                    .addDie(Die.Ability)
+                    .addDie(Die.Proficiency)
+                expect(pool.dice).to.deep.equal([
+                    Die.Proficiency,
+                    Die.Ability,
+                    Die.Boost,
+                    Die.Challange,
+                    Die.Difficulty,
+                    Die.Setback,
+                    Die.Force
+                ])
+            })
+        })
+        describe("sort", () => {
+            it("should sorted in custom order", () => {
+                const pool = new Pool([Die.Proficiency, Die.Challange]).sort([DieKind.Challange, DieKind.Proficiency])
+                expect(pool.dice).to.deep.equal([Die.Challange, Die.Proficiency])
             })
         })
     })
