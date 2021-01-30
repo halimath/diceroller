@@ -29,7 +29,7 @@ module.exports = {
     },
     devServer: {
         contentBase: "./public",
-        host: "0.0.0.0",
+        open: true,
         compress: true,
         port: 9999,
     }

@@ -93,3 +93,7 @@ export function formatPoolResult (r: AggregatedPoolResult): string {
 
     return s
 }
+
+export function randomNumber(max: number, startsWithOne = false): number {
+    return Math.floor(Math.random() * Math.floor(max)) + (startsWithOne ? 1:0)
+}

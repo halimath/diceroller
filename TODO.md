@@ -10,6 +10,7 @@
 * Add negative dice for standard difficulty classes (easy, medium, ...)
 * Upgrade (positive, negative) pool
 * Share - include icons in shared content for easier recognition
+* ~~Add D10 and D100~~
 
 ## Build and Automation
 * ~~ESLint~~
