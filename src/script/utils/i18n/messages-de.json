@@ -1,4 +1,14 @@
 {
+    "die.d10": "W10",
+    "die.d100": "W100",
+    "die.ability.initial": "B",
+    "die.proficiency.initial": "T",
+    "die.difficulty.initial": "S",
+    "die.challange.initial": "H",
+    "die.boost.initial": "V",
+    "die.setback.initial": "K",
+    "die.force.initial": "M",
+
     "pool.usage.t": "Tippe einen der kleinen Würfel an, um ihn dem Pool hinzuzufügen. Tippe einen der Würfel aus dem Pool an, um ihn zu entfernen.",
     "pool.empty.t": "Dein Würfelpool ist leer.",
     "pool.emptyPool.t": "Pool leeren",
@@ -25,5 +35,4 @@
     "result.details": "Unten findest Du alle Symbole, die die Würfel gezeigt haben.",
 
     "result.copied.t": "In die Zwischenablage kopiert"
-
 }

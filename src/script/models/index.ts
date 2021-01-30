@@ -1,3 +1,4 @@
+import { randomNumber as randomInteger } from "../utils"
 
 export enum DieSymbol {
     Success = "success",
@@ -20,6 +21,11 @@ export enum DieKind {
     Boost = "boost",
     Setback = "setback",
     Force = "force",
+}
+
+export enum NumericDieKind {
+    D10 = "ten",
+    D100 = "hundred"
 }
 
 export class Die {
@@ -133,7 +139,7 @@ export class Die {
     private constructor(public readonly kind: DieKind, public readonly sides: Array<Side>) { }
 
     roll(): DieResult {
-        const side = this.sides[Math.floor(Math.random() * Math.floor(this.sides.length))]
+        const side = this.sides[randomInteger(this.sides.length)]
         if (side === null) {
             return DieResult.blank()
         }
@@ -255,6 +261,10 @@ export class PoolResult {
     }
 }
 
+export class NumericDieResult {
+    constructor (public readonly value: number) {}
+}
+
 export class Model { 
-    constructor (public readonly pool: Pool, public readonly poolResult?: PoolResult) {}
+    constructor (public readonly pool: Pool, public readonly poolResult?: PoolResult, public readonly numericDieResult?: NumericDieResult) {}
 }
