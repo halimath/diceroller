@@ -1,38 +1,14 @@
 
 @charset "utf-8"
 
-// custom colors
-@import "colors"
-
-/*
- *   override bulma variables 
- */
-
-// utilities/initial-variables
-
-$info: #01579b
-
-// layout/footer
-$footer-color: #fff
-$footer-background-color: $blue-grey
-$footer-padding: 3rem 1.5rem 3rem
-
-// Import only what you need from Bulma
+@import "_variables"
 @import "~bulma/bulma"
-
-/* bugfix: remove display flex for full-hd */
-+from($navbar-breakpoint)
-.navbar
-    align-items: inherit !important
-    display: inherit !important
-    .container
-        align-items: inherit !important
-        display: inherit !important
+@import "_overrides"
 
 body>div
-        display: flex
-        min-height: 100vh
-        flex-direction: column
+    display: flex
+    min-height: 100vh
+    flex-direction: column
 
 main
     flex: 1 0 auto
