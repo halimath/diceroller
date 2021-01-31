@@ -1,4 +1,5 @@
 const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 module.exports = {
     mode: "development",
@@ -16,13 +17,26 @@ module.exports = {
             {
                 test: /\.s[ac]ss$/i,
                 use: [
-                    "style-loader",
-                    "css-loader",
-                    "sass-loader",
-                ],
+                    MiniCssExtractPlugin.loader,
+                    {
+                      loader: 'css-loader'
+                    },
+                    {
+                      loader: 'sass-loader',
+                      options: {
+                        sourceMap: true,
+                        // options...
+                      }
+                    }
+                  ]
             }            
         ]
     },
+    plugins: [
+        new MiniCssExtractPlugin({
+            filename: 'css/diceroller.css'
+        }),
+    ],
     resolve: {
         extensions: [".ts", ".js", ".html"],
         plugins: [new TsconfigPathsPlugin()]

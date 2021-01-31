@@ -1,13 +1,12 @@
 import * as wecco from "@wecco/core"
 
-import {AddDie, update} from "./control"
-import {Model, Pool} from "./models"
+import { AddDie, update } from "./control"
+import { Model, Pool } from "./models"
 import { charToDieKind } from "./utils"
-import {root} from "./views"
+import { root } from "./views"
 
 import "../styles/index.sass"
 
-import "materialize-css"
 
 document.addEventListener("DOMContentLoaded", () => {
     const context = wecco.app(() => new Model(Pool.empty()), update, root, "#app")

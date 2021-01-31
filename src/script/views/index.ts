@@ -9,8 +9,8 @@ import { m } from "../utils/i18n"
 export function root(model: Model, context: wecco.AppContext<Message>): wecco.ElementUpdate {
     return appShell(wecco.html`
     
-    <div class="row">
-        <div class="col s12 m12 l6">
+    <div class="columns">
+        <div class="column is-half-desktop">
             ${pool(model.pool, context)}
             <hr />
             ${toolbar(context)}
@@ -19,13 +19,17 @@ export function root(model: Model, context: wecco.AppContext<Message>): wecco.El
         ${model.poolResult ? result(model.poolResult, context) : ""}
     </div>
     
-    <div class="row">
-        <div class="col s12 m12 l6">
+    <div class="columns">
+        <div class="column is-half-desktop">
             <hr />
-            ${addNumericDie(NumericDieKind.D10, context)}
-            ${addNumericDie(NumericDieKind.D100, context)}
     
-            ${model.numericDieResult ? numericResult(model.numericDieResult, context) : ""}
+            ${numericResult(model.numericDieResult, context)}
+    
+            <div class="buttons">
+                ${addNumericDie(NumericDieKind.D10, context)}
+                ${addNumericDie(NumericDieKind.D100, context)}
+            </div>
+    
         </div>
     </div>
 
@@ -34,7 +38,8 @@ export function root(model: Model, context: wecco.AppContext<Message>): wecco.El
 
 function toolbar(context: wecco.AppContext<Message>): wecco.ElementUpdate {
     return wecco.html`
-        <p class="center-align">
+    
+        <p class="buttons is-centered">
             ${addDie(DieKind.Proficiency, context)}
             ${addDie(DieKind.Ability, context)}
             ${addDie(DieKind.Boost, context)}
@@ -43,19 +48,20 @@ function toolbar(context: wecco.AppContext<Message>): wecco.ElementUpdate {
             ${addDie(DieKind.Setback, context)}
             ${addDie(DieKind.Force, context)}
         </p>
+        
         <p>${m("pool.usage.t")}</p>
-
     `
 }
 
 function pool(pool: Pool, context: wecco.AppContext<Message>): wecco.ElementUpdate {
     let body: wecco.ElementUpdate
 
+
     if (pool.empty) {
-        body = wecco.html`<p class="center-align empty-pool-message"><em>${m("pool.empty.t")}</em></p>`
+        body = wecco.html`<p class="has-text-centered empty-pool-message pt-2 mb-5"><em>${m("pool.empty.t")}</em></p>`
     } else {
         body = wecco.html`
-            <p class="center-align">
+            <p class="buttons is-centered">
                 ${pool.dice.map(d => removeDie(d, context))}
             </p>
         `
@@ -63,10 +69,11 @@ function pool(pool: Pool, context: wecco.AppContext<Message>): wecco.ElementUpda
 
     return wecco.html`        
         ${body}
-        <p class="right-align">
-            <a class="btn-flat m-r2 light-blue-text text-darken-4" ?disabled=${pool.empty} @click=${()=> context.emit(new
-                EmptyPool())}><i class="material-icons left">delete</i>${m("pool.emptyPool.t")}</a>
-            <a class="btn waves-effect waves-light m-r2 light-blue darken-4" ?disabled=${pool.empty} @click=${()=>
+        <p class="buttons is-right">
+            <a class="button is-outlined is-info" ?disabled=${pool.empty} @click=${()=>
+            context.emit(new
+                        EmptyPool())}><i class="material-icons left">delete</i>${m("pool.emptyPool.t")}</a>
+            <a class="button is-info" ?disabled=${pool.empty} @click=${()=>
                 context.emit(new RollPool())}>${m("pool.roll.t")}</a>
         </p>
     `
@@ -77,19 +84,19 @@ function result(result: PoolResult, context: wecco.AppContext<Message>): wecco.E
     const aggregatedResult = result.aggregate()
 
     return wecco.html`
-    <div class="col s12 m12 l6">
-        <p class="center-align">
+    <div class="column is-half-desktop">
+        <p class="has-text-centered">
             ${resultIcons(normalizedResult)}
             ${resultText(normalizedResult)}
         </p>
-        <div class="right-align">
-            ${isClipboardSupported() ? wecco.html`<a class="btn waves-effect waves-light m-r2 light-blue darken-4"
-                @click=${()=> context.emit(new Copy())}><i class="material-icons">content_copy</i></a>` : ""}
-            ${isSharingSupported() ? wecco.html`<a class="btn waves-effect waves-light m-r2 light-blue darken-4"
-                @click=${()=> context.emit(new Share())}><i class="material-icons">share</i></a>` : ""}
+        <div class="buttons is-right">
+            ${isClipboardSupported() ? wecco.html`<a class="button is-info" @click=${()=> context.emit(new Copy())}><i
+                    class="material-icons">content_copy</i></a>` : ""}
+            ${isSharingSupported() ? wecco.html`<a class="button is-info" @click=${()=> context.emit(new Share())}><i
+                    class="material-icons">share</i></a>` : ""}
         </div>
         <p>${m("result.details")}</p>
-        <p class="center-align aggregated-result">
+        <p class="has-text-centered aggregated-result">
             ${resultIcons(aggregatedResult)}
             <p>${formatPoolResult(aggregatedResult)}</p>
         </p>
@@ -97,20 +104,22 @@ function result(result: PoolResult, context: wecco.AppContext<Message>): wecco.E
     `
 }
 
-function numericResult(result: NumericDieResult, context: wecco.AppContext<Message>): wecco.ElementUpdate {
+function numericResult(result: NumericDieResult | undefined, context: wecco.AppContext<Message>): wecco.ElementUpdate {
     return wecco.html`
     <p>
-        <div class="chip minw-2 center-align">
-            ${result.value}
-            <i class="remove-numeric-result material-icons" @click=${()=> context.emit(new
-        RemoveNumericResult())}>delete</i>
+        <div class="box">
+            ${result ? wecco.html`${result.value} <i class="remove-numeric-result material-icons" @click=${()=>
+            context.emit(new
+                RemoveNumericResult())}>delete</i>` : m("result.numeric.empty")}
+    
+    
         </div>
     </p>
     `
 }
 
 function resultText(result: AggregatedPoolResult): wecco.ElementUpdate {
-    return wecco.html`<p class="flow-text">${formatPoolResult(result)}</p>`
+    return wecco.html`<p class="is-size-4">${formatPoolResult(result)}</p>`
 }
 
 function resultIcons(result: AggregatedPoolResult): wecco.ElementUpdate {
@@ -146,12 +155,12 @@ function removeDie(die: Die, context: wecco.AppContext<Message>): wecco.ElementU
 }
 
 function addDie(die: DieKind, context: wecco.AppContext<Message>): wecco.ElementUpdate {
-    return dieButton(die, "btn-small", new AddDie(die), context)
+    return dieButton(die, "is-small", new AddDie(die), context)
 }
 
 function dieButton(die: DieKind, additionalStyleClasses: string, msg: Message, context: wecco.AppContext<Message>): wecco.ElementUpdate {
     const [styleClasses, labelKey] = determineButtonStyle(die)
-    return wecco.html`<button class="btn waves-effect waves-light m-r2 ${styleClasses} ${additionalStyleClasses}" @click=${()=>
+    return wecco.html`<button class="button ${styleClasses} ${additionalStyleClasses}" @click=${()=>
     context.emit(msg)}>${m(labelKey)}</button>`
 
 }
@@ -159,16 +168,16 @@ function dieButton(die: DieKind, additionalStyleClasses: string, msg: Message, c
 function addNumericDie(numericDieKind: NumericDieKind, context: wecco.AppContext<Message>): wecco.ElementUpdate {
     const [styleClasses, labelKey] = determineNumericStyle(numericDieKind)
 
-    return wecco.html`<button class="btn waves-effect waves-light m-r2 ${styleClasses}" @click=${()=> context.emit(new
+    return wecco.html`<button class="button ${styleClasses}" @click=${()=> context.emit(new
     RollNumeric(numericDieKind))}>${m(labelKey)}</button>`
 }
 
 function determineNumericStyle(numericDieKind: NumericDieKind): [string, string] {
     switch (numericDieKind) {
         case NumericDieKind.D10:
-            return ["indigo", "die.d10"]
+            return ["is-d-10", "die.d10"]
         case NumericDieKind.D100:
-            return ["deep-orange darken-4", "die.d100"]
+            return ["is-d-100", "die.d100"]
     }
 }
 
@@ -176,48 +185,46 @@ function determineNumericStyle(numericDieKind: NumericDieKind): [string, string]
 function determineButtonStyle(die: DieKind): [string, string] {
     switch (die) {
         case DieKind.Ability:
-            return ["green", "die.ability.initial"]
+            return ["is-ability", "die.ability.initial"]
         case DieKind.Proficiency:
-            return ["yellow black-text", "die.proficiency.initial"]
+            return ["is-proficiency", "die.proficiency.initial"]
         case DieKind.Difficulty:
-            return ["purple darken-3", "die.difficulty.initial"]
+            return ["is-difficulty", "die.difficulty.initial"]
         case DieKind.Challange:
-            return ["red", "die.challange.initial"]
+            return ["is-challange", "die.challange.initial"]
         case DieKind.Boost:
-            return ["blue lighten-2 black-text", "die.boost.initial"]
+            return ["is-boost", "die.boost.initial"]
         case DieKind.Setback:
-            return ["black", "die.setback.initial"]
+            return ["is-setback", "die.setback.initial"]
         case DieKind.Force:
-            return ["white black-text", "die.force.initial"]
+            return ["is-force", "die.force.initial"]
     }
 }
 
 function appShell(main: wecco.ElementUpdate): wecco.ElementUpdate {
     return wecco.html`
+    
     <header>
-        <nav>
-            <div class="nav-wrapper blue-grey darken-4">
-                <div class="container">
-                    <a class="brand-logo left" href="/">Dice Roller</a>
-                    <ul class="right">
-                        <li><a href="https://github.com/halimath/diceroller/"><img src="/img/github.png" height="48"
-                                    alt="github.com/halimath/diceroller"></a></li>
-                    </ul>
+        <nav class="navbar is-blue-grey" role="navigation" aria-label="main navigation">
+            <div class="container">
+                <div class="navbar-brand is-justify-content-space-between">
+                    <a class="navbar-item" href="/">
+                        <h1 class="is-size-2 has-text-white">Dice Roller</h1>
+                    </a>
+                    <a class="navbar-item navbar-github-icon" href="https://github.com/halimath/diceroller/">
+                        <img src="/img/github.png" height="48" alt="github.com/halimath/diceroller">
+                    </a>
                 </div>
             </div>
         </nav>
     </header>
-    <main>
-        <div class="container">${main}</div>
+    <main class="container section">
+        ${main}
     </main>
-    <footer class="page-footer blue-grey darken-2">
+    <footer class="footer is-dark">
         <div class="container">
-            <div class="row">
-                <div class="col s12">
-                    <p>DiceRoller v${version}</p>
-                    <p>Copyright (c) 2020 Alexander Metzner.</p>
-                </div>
-            </div>
+            <p>DiceRoller v${version}</p>
+            <p>Copyright (c) 2020 Alexander Metzner.</p>
         </div>
     </footer>
     `
