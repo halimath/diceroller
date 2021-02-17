@@ -1,0 +1,45 @@
+// mixins from https://gist.github.com/adamgiese/717969cb38d4b30e1eff3d3abc6472f0
+
+@mixin valid-quantity($quantity)
+    @if type-of($quantity) != 'number'
+        @error 'The "quantity" parameter must be a number!'
+    @if not(unitless($quantity))
+        @error 'The "quantity" parameter must not have a unit!'
+    @if $quantity < 0
+        @error 'The "quantity" parameter must be at least 0!'
+
+@mixin has-nth($expression, $element: '*')
+    &:nth-last-child(#{$expression}):first-child,
+    &:nth-last-child(#{$expression}):first-child ~ #{$element}
+        @content
+
+@mixin at-least($quantity, $element: '*')
+    @include valid-quantity($quantity)
+    @include has-nth('n + #{$quantity}', $element)
+        @content
+
+$dieDimension: 3rem
+
+$dieKinds: (ability:$ability, proficiency:$proficiency, difficulty:$difficulty, challange:$challange, boost:$boost, setback:$setback)
+
+.die
+    width: $dieDimension
+    height: $dieDimension
+    &.die-challange, &.die-difficulty, &.die-setback
+        fill: #fff !important
+    .shape
+        @each $kind, $color in $dieKinds
+            &-#{$kind}
+                fill: $color
+    .symbols
+        .symbol
+            >*
+                transform: scale(0.4)
+                transform-origin: center calc(#{$dieDimension} * 0.75)
+            @include at-least(2,'.symbol')
+                &:nth-child(1)>*
+                    transform-origin: center calc(#{$dieDimension} * 0.45)
+                    transform: scale(0.3)
+                &:nth-child(2)>*
+                    transform-origin: center calc(#{$dieDimension} * 0.95)
+                    transform: scale(0.35)
