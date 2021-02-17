@@ -28,18 +28,46 @@ $dieKinds: (ability:$ability, proficiency:$proficiency, difficulty:$difficulty, 
     &.die-challange, &.die-difficulty, &.die-setback
         fill: #fff !important
     .shape
+        border-radius: 5px
         @each $kind, $color in $dieKinds
             &-#{$kind}
                 fill: $color
-    .symbols
-        .symbol
-            >*
-                transform: scale(0.4)
-                transform-origin: center calc(#{$dieDimension} * 0.75)
-            @include at-least(2,'.symbol')
-                &:nth-child(1)>*
-                    transform-origin: center calc(#{$dieDimension} * 0.45)
-                    transform: scale(0.3)
-                &:nth-child(2)>*
-                    transform-origin: center calc(#{$dieDimension} * 0.95)
-                    transform: scale(0.35)
+    &.die-challange, &.die-proficiency
+        .symbols
+            .symbol
+                >*
+                    transform: scale(0.5)
+                    transform-origin: center calc(#{$dieDimension} * 0.55)
+                @include at-least(2,'.symbol')
+                    &:nth-child(1)>*
+                        transform-origin: center calc(#{$dieDimension} * 0.3)
+                        transform: scale(0.3)
+                    &:nth-child(2)>*
+                        transform-origin: center calc(#{$dieDimension} * 0.8)
+                        transform: scale(0.3)
+    &.die-ability, &.die-difficulty
+        .symbols
+            .symbol
+                >*
+                    transform: scale(0.4)
+                    transform-origin: center calc(#{$dieDimension} * 0.75)
+                @include at-least(2,'.symbol')
+                    &:nth-child(1)>*
+                        transform-origin: center calc(#{$dieDimension} * 0.45)
+                        transform: scale(0.25)
+                    &:nth-child(2)>*
+                        transform-origin: center calc(#{$dieDimension} * 0.85)
+                        transform: scale(0.25)
+    &.die-boost, &.die-setback
+        .symbols
+            .symbol
+                >*
+                    transform: scale(0.5)
+                    transform-origin: center center
+                @include at-least(2,'.symbol')
+                    &:nth-child(1)>*
+                        transform-origin: calc(#{$dieDimension} * 0.2) calc(#{$dieDimension} * 0.2)
+                        transform: scale(0.35)
+                    &:nth-child(2)>*
+                        transform-origin: calc(#{$dieDimension} * 0.8) calc(#{$dieDimension} * 0.8)
+                        transform: scale(0.35)
