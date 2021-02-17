@@ -2,12 +2,13 @@ import * as wecco from "@wecco/core"
 import { Die, DieKind, DieResult, DieSymbol } from "../models"
 
 
-export function die(kind: DieKind, symbols: Array<DieSymbol>): wecco.ElementUpdate {
+export function die(kind: DieKind, content: Array<DieSymbol> | string): wecco.ElementUpdate {
     return wecco.html`   
         <svg class="die die-${kind}" xmlns="http://www.w3.org/2000/svg">
             ${dieShape(kind)}
             <g class="symbols">
-                ${symbols.map(symbol => faceSymbol(symbol))}
+                ${Array.isArray(content) ? content.map(symbol => faceSymbol(symbol)) : 
+                    faceText(content)}
             </g>
         </svg>
     `
@@ -30,6 +31,14 @@ export function faceSymbol(s: DieSymbol): wecco.ElementUpdate {
     <svg class="symbol" xmlns="http://www.w3.org/2000/svg">
         <use href="#icon-${s}" class="format" />
     </svg>
+    `
+}
+
+export function faceText(text: string): wecco.ElementUpdate {
+    return wecco.html`
+        <svg class="text">
+            <text x="50%" y="50%"  text-anchor="middle" alignment-baseline="central">${text}</text>
+        </svg>
     `
 }
 

@@ -20,19 +20,28 @@
 
 $dieDimension: 3rem
 
-$dieKinds: (ability:$ability, proficiency:$proficiency, difficulty:$difficulty, challange:$challange, boost:$boost, setback:$setback)
+$dieKinds: (ability:$ability, proficiency:$proficiency, difficulty:$difficulty, challange:$challange, boost:$boost, setback:$setback, force: $force)
+
+.die-button
+    cursor: pointer
 
 .die
     width: $dieDimension
     height: $dieDimension
+    filter: drop-shadow(0px 3px 1px rgba(0, 0, 0, 0.2))
+
+    &.die-force
+        stroke: black
     &.die-challange, &.die-difficulty, &.die-setback
         fill: #fff !important
     .shape
-        border-radius: 5px
         @each $kind, $color in $dieKinds
             &-#{$kind}
                 fill: $color
-    &.die-challange, &.die-proficiency
+    .symbols
+        .text text
+            transform-origin: center center
+    &.die-challange, &.die-proficiency, &.die-force
         .symbols
             .symbol
                 >*

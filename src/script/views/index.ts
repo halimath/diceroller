@@ -164,11 +164,14 @@ function addDie(die: DieKind, context: wecco.AppContext<Message>): wecco.Element
     return dieButton(die, "is-small", new AddDie(die), context)
 }
 
-function dieButton(die: DieKind, additionalStyleClasses: string, msg: Message, context: wecco.AppContext<Message>): wecco.ElementUpdate {
-    const [styleClasses, labelKey] = determineButtonStyle(die)
-    return wecco.html`<button class="button ${styleClasses} ${additionalStyleClasses}" @click=${() =>
-        context.emit(msg)}>${m(labelKey)}</button>`
+function dieButton(kind: DieKind, additionalStyleClasses: string, msg: Message, context: wecco.AppContext<Message>): wecco.ElementUpdate {
+    const [styleClasses, labelKey] = determineButtonStyle(kind)
 
+    return wecco.html`
+        <div class="die-button" @click=${() => context.emit(msg)}>
+            ${die(kind, m(labelKey))}
+        </div>
+    `
 }
 
 function addNumericDie(numericDieKind: NumericDieKind, context: wecco.AppContext<Message>): wecco.ElementUpdate {
