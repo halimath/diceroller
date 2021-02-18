@@ -165,11 +165,9 @@ function addDie(die: DieKind, context: wecco.AppContext<Message>): wecco.Element
 }
 
 function dieButton(kind: DieKind, additionalStyleClasses: string, msg: Message, context: wecco.AppContext<Message>): wecco.ElementUpdate {
-    const [styleClasses, labelKey] = determineButtonStyle(kind)
-
     return wecco.html`
-        <div class="die-button" @click=${() => context.emit(msg)}>
-            ${die(kind, m(labelKey))}
+        <div class="die-button ${additionalStyleClasses}" @click=${() => context.emit(msg)}>
+            ${die(kind, m(determineLabelKey(kind)))}
         </div>
     `
 }
@@ -191,22 +189,22 @@ function determineNumericStyle(numericDieKind: NumericDieKind): [string, string]
 }
 
 
-function determineButtonStyle(die: DieKind): [string, string] {
+function determineLabelKey(die: DieKind): string {
     switch (die) {
         case DieKind.Ability:
-            return ["is-ability", "die.ability.initial"]
+            return "die.ability.initial"
         case DieKind.Proficiency:
-            return ["is-proficiency", "die.proficiency.initial"]
+            return "die.proficiency.initial"
         case DieKind.Difficulty:
-            return ["is-difficulty", "die.difficulty.initial"]
+            return "die.difficulty.initial"
         case DieKind.Challange:
-            return ["is-challange", "die.challange.initial"]
+            return "die.challange.initial"
         case DieKind.Boost:
-            return ["is-boost", "die.boost.initial"]
+            return "die.boost.initial"
         case DieKind.Setback:
-            return ["is-setback", "die.setback.initial"]
+            return "die.setback.initial"
         case DieKind.Force:
-            return ["is-force", "die.force.initial"]
+            return "die.force.initial"
     }
 }
 
