@@ -6,7 +6,7 @@ export function die(kind: DieKind, content: Array<DieSymbol> | string): wecco.El
     return wecco.html`   
         <svg class="die die-${kind}" xmlns="http://www.w3.org/2000/svg">
             ${dieShape(kind)}
-            <g class="symbols">
+            <g>
                 ${Array.isArray(content) ? content.map(symbol => faceSymbol(symbol)) : 
                     faceText(content)}
             </g>
