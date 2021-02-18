@@ -29,7 +29,7 @@ export function dieShape(kind: DieKind): wecco.ElementUpdate {
 export function faceSymbol(s: DieSymbol): wecco.ElementUpdate {
     return wecco.html`
     <svg class="symbol" xmlns="http://www.w3.org/2000/svg">
-        <use href="#icon-${s}" class="format" />
+        <use href="#icon-${s}" />
     </svg>
     `
 }
@@ -37,7 +37,7 @@ export function faceSymbol(s: DieSymbol): wecco.ElementUpdate {
 export function faceText(text: string): wecco.ElementUpdate {
     return wecco.html`
         <svg class="text">
-            <text x="50%" y="50%"  text-anchor="middle" alignment-baseline="central">${text}</text>
+            <text x="50%" y="50%"  text-anchor="middle" dominant-baseline="middle" alignment-baseline="central">${text}</text>
         </svg>
     `
 }
