@@ -43,8 +43,10 @@ module.exports = {
     },
     devServer: {
         contentBase: "./public",
-        open: true,
         compress: true,
+        host: "0.0.0.0",
         port: 9999,
+        open: true,
+        openPage: 'http://localhost:9999'
     }
 };
