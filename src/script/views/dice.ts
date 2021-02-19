@@ -4,7 +4,7 @@ import { Die, DieKind, DieResult, DieSymbol } from "../models"
 
 export function die(kind: DieKind, content: Array<DieSymbol> | string): wecco.ElementUpdate {
     return wecco.html`   
-        <svg class="die die-${kind}" xmlns="http://www.w3.org/2000/svg">
+        <svg class="die die-${kind}" tabindex="-1" xmlns="http://www.w3.org/2000/svg">
             ${dieShape(kind)}
             <g>
                 ${Array.isArray(content) ? content.map(symbol => faceSymbol(symbol)) : 
