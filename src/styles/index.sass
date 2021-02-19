@@ -1,5 +1,11 @@
 
-@import "~materialize-css"
+@charset "utf-8"
+
+@import "_variables"
+@import "~bulma/bulma"
+@import "_overrides"
+
+@import "_dice"
 
 body>div
     display: flex
@@ -9,23 +15,10 @@ body>div
 main
     flex: 1 0 auto
 
-
-.nav-wrapper
+.navbar-github-icon
     img
-        -webkit-filter: grayscale(1) invert(1)
-        filter: grayscale(1) invert(1)
-        margin-top: 0.3rem
-h1
-    font-size: 1.6rem
-
-h2
-    font-size: 1.4rem
-
-.m-r2
-    margin-right: 0.4rem
-
-.p-3
-    padding-top: 0.6rem
+        -webkit-filter: invert(1)
+        filter: invert(1)
 
 .result
     font-size: 1.5rem
@@ -36,14 +29,7 @@ h2
     height: 4rem
 
 .empty-pool-message
-    height: $button-height
-
-.aggregated-result    
-    svg
-        width: 2rem
-
-a
-    cursor: pointer
+    height: $control-height
 
 .remove-numeric-result
     cursor: pointer
@@ -51,6 +37,3 @@ a
     font-size: 16px
     line-height: 32px
     padding-left: 8px
-
-.minw-2
-    min-width: 5rem !important

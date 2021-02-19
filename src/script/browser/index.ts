@@ -1,5 +1,7 @@
 /// </// <reference path="./materialize.d.ts" />
 
+import { toast } from "bulma-toast"
+
 
 export function isSharingSupported(): boolean {
     return typeof (navigator.share) === "function"
@@ -16,7 +18,7 @@ export async function shareText(text: string): Promise<void> {
 }
 
 export function isClipboardSupported(): boolean {
-    return typeof(navigator.clipboard) !== "undefined"
+    return typeof (navigator.clipboard) !== "undefined"
 }
 
 export function copyTextToClipboard(text: string): Promise<void> {
@@ -27,5 +29,9 @@ export function copyTextToClipboard(text: string): Promise<void> {
 }
 
 export function notify(message: string): void {
-    M.toast({ html: message })
+    toast({
+        message, type: "is-dark",
+        "duration": 4000,
+
+    })
 }

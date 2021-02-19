@@ -34,5 +34,9 @@
 
     "result.details": "Find all symbols shown an the dice rolled below.",
 
-    "result.copied.t": "Copied to clipboard" 
+    "result.copied.t": "Copied to clipboard",
+
+    "result.numeric.empty": "You didn't roll a numeric die."
+
+
 }

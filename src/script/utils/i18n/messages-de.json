@@ -34,5 +34,7 @@
 
     "result.details": "Unten findest Du alle Symbole, die die Würfel gezeigt haben.",
 
-    "result.copied.t": "In die Zwischenablage kopiert"
+    "result.copied.t": "In die Zwischenablage kopiert",
+
+    "result.numeric.empty": "Du hast keinen Zahlenwert gewürfelt."
 }
