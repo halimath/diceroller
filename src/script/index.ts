@@ -1,6 +1,6 @@
 import * as wecco from "@wecco/core"
 
-import { AddDie, update } from "./control"
+import { AddDie, RollPool, update } from "./control"
 import { Model, Pool } from "./models"
 import { charToDieKind } from "./utils"
 import { root } from "./views"
@@ -18,5 +18,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 // Nothing to do here; dispatching the AddDie message forces a rewrite of the url eliminating any misplaced chars.
             }
         })
+        context.emit(new RollPool())
     }
 })
