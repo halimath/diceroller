@@ -38,6 +38,47 @@ export enum NumericDieKind {
     D100 = "hundred"
 }
 
+export enum DifficultyLevel {
+    Easy = "easy",
+    Average = "average",
+    Hard = "hard",
+    Daunting = "daunting",
+    Formidable = "formidable",
+}
+
+
+
+export const difficultyDiceCount = new Map([
+    [DifficultyLevel.Easy, 1],
+    [DifficultyLevel.Average, 2],
+    [DifficultyLevel.Hard, 3],
+    [DifficultyLevel.Daunting, 4],
+    [DifficultyLevel.Formidable, 5]
+])
+
+export class Difficulty {
+
+    static get Easy(): Difficulty {
+        return new Difficulty(DifficultyLevel.Easy, 1)
+    }
+
+    static get Average(): Difficulty {
+        return new Difficulty(DifficultyLevel.Average, 2)
+    }
+    static get Hard(): Difficulty {
+        return new Difficulty(DifficultyLevel.Hard, 3)
+    }
+    static get Daunting(): Difficulty {
+        return new Difficulty(DifficultyLevel.Daunting, 4)
+    }
+    static get Formidable(): Difficulty {
+        return new Difficulty(DifficultyLevel.Formidable, 5)
+    }
+
+    private constructor(public readonly level: DifficultyLevel, public readonly diceCount: number) { }
+}
+
+
 export class Die {
     static get Ability(): Die {
         return new Die(DieKind.Ability,
@@ -198,9 +239,16 @@ export class Pool {
         return new Pool(sortedDice)
     }
 
+    clear(kind: DieKind) {
+        let dice = [...(this.dice)].filter(die => die.kind !== kind)
+
+        return new Pool(dice)
+    }
+
     roll(): PoolResult {
         return new PoolResult(this.dice.map(d => d.roll()))
     }
+
 }
 
 export type AggregatedPoolResult = Record<DieSymbol, number>

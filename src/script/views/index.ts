@@ -1,11 +1,11 @@
 import * as wecco from "@wecco/core"
 import { version } from "../../../package.json"
 import { isClipboardSupported, isSharingSupported } from "../browser"
-import { AddDie, Copy, EmptyPool, Message, RemoveDie, RemoveNumericResult, RollNumeric, RollPool, Share } from "../control"
-import { Die, DieKind, Model, AggregatedPoolResult, Pool, DieSymbol, PoolResult, NumericDieKind, NumericDieResult } from "../models"
+import { AddDie, AddDifficulty, Copy, EmptyPool, Message, RemoveDie, RemoveNumericResult, RollNumeric, RollPool, Share } from "../control"
+import { Die, DieKind, Model, AggregatedPoolResult, Pool, DieSymbol, PoolResult, NumericDieKind, NumericDieResult, DifficultyLevel, DieKindOrder, difficultyDiceCount, Difficulty } from "../models"
 import { formatPoolResult } from "../utils"
 import { m } from "../utils/i18n"
-import { die, dice } from "./dice"
+import { die, dice, dieShape } from "./dice"
 
 export function root(model: Model, context: wecco.AppContext<Message>): wecco.ElementUpdate {
     return appShell(wecco.html`
@@ -15,6 +15,8 @@ export function root(model: Model, context: wecco.AppContext<Message>): wecco.El
             ${pool(model.pool, context)}
             <hr />
             ${toolbar(context)}
+            ${difficulty(model.pool, context)}
+    
         </div>
     
         ${model.poolResult ? result(model.poolResult, context) : ""}
@@ -80,6 +82,29 @@ function pool(pool: Pool, context: wecco.AppContext<Message>): wecco.ElementUpda
     `
 }
 
+function difficulty(pool: Pool, context: wecco.AppContext<Message>): wecco.ElementUpdate {
+    return wecco.html`
+    <p>Probe</p>
+    <div class="buttons are-small is-centered">
+        ${addDifficulty(Difficulty.Easy, context)}
+        ${addDifficulty(Difficulty.Average, context)}
+        ${addDifficulty(Difficulty.Hard, context)}
+        ${addDifficulty(Difficulty.Daunting, context)}
+        ${addDifficulty(Difficulty.Formidable, context)}
+    </div>
+
+    `
+}
+
+function addDifficulty(difficulty: Difficulty, context: wecco.AppContext<Message>): wecco.ElementUpdate {
+    return wecco.html`       
+        <button class="button is-difficulty is-outlined" @click=${()=> context.emit(new
+            AddDifficulty(difficulty.level))}>
+            ${m(`difficulty.${difficulty.level}`)}
+        </button>
+    `
+}
+
 function result(result: PoolResult, context: wecco.AppContext<Message>): wecco.ElementUpdate {
     const normalizedResult = result.normalize()
     const aggregatedResult = result.aggregate()
@@ -98,13 +123,9 @@ function result(result: PoolResult, context: wecco.AppContext<Message>): wecco.E
         </div>
         <p>${m("result.details")}</p>
     
-        <p>test</p>
-    
-    
         <p class="has-text-centered aggregated-result">
             ${dice(result.dieResults)}
             <p>${formatPoolResult(aggregatedResult)}</p>
-    
         </p>
     </div>
     `
@@ -125,7 +146,7 @@ function numericResult(result: NumericDieResult | undefined, context: wecco.AppC
 }
 
 function resultText(result: AggregatedPoolResult): wecco.ElementUpdate {
-    return wecco.html`<p class="is-size-4">${formatPoolResult(result)}</p>`
+    return wecco.html`<p class="is-size-4"> ${formatPoolResult(result)} </p>`
 }
 
 function resultIcons(result: AggregatedPoolResult): wecco.ElementUpdate {

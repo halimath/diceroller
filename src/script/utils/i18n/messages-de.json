@@ -9,6 +9,12 @@
     "die.setback.initial": "K",
     "die.force.initial": "M",
 
+    "difficulty.easy": "Einfach",
+    "difficulty.average": "Mittelschwer",
+    "difficulty.hard": "Schwer",
+    "difficulty.daunting": "Sehr schwierig",
+    "difficulty.formidable": "Extrem schwierig",
+
     "pool.usage.t": "Tippe einen der kleinen Würfel an, um ihn dem Pool hinzuzufügen. Tippe einen der Würfel aus dem Pool an, um ihn zu entfernen.",
     "pool.empty.t": "Dein Würfelpool ist leer.",
     "pool.emptyPool.t": "Pool leeren",
