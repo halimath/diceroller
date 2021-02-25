@@ -98,9 +98,6 @@ function result(result: PoolResult, context: wecco.AppContext<Message>): wecco.E
         </div>
         <p>${m("result.details")}</p>
     
-        <p>test</p>
-    
-    
         <p class="has-text-centered aggregated-result">
             ${dice(result.dieResults)}
             <p>${formatPoolResult(aggregatedResult)}</p>
