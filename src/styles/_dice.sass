@@ -25,7 +25,8 @@ $dieKinds: (ability:$ability, proficiency:$proficiency, difficulty:$difficulty, 
 $die-force: ( stroke: black, singleSymbol: (scale: 0.5, transform-origin: center calc(#{$dieDimension} * 0.55) ))
 
 .die-button
-    cursor: pointer
+    @extend .is-unselectable
+    @extend .is-clickable
     &.is-small
         .die
             width: calc(#{$dieDimension} * 0.8)
