@@ -38,6 +38,11 @@ export enum NumericDieKind {
     D100 = "hundred"
 }
 
+export enum PoolModification {
+    Ability,
+    Difficulty
+}
+
 export class Die {
     static get Ability(): Die {
         return new Die(DieKind.Ability,
@@ -146,6 +151,18 @@ export class Die {
             ])
     }
 
+    static ByKind(kind: DieKind): Die {
+        switch (kind) {
+            case DieKind.Ability: return Die.Ability
+            case DieKind.Boost: return Die.Boost
+            case DieKind.Challange: return Die.Challange
+            case DieKind.Difficulty: return Die.Difficulty
+            case DieKind.Proficiency: return Die.Proficiency
+            case DieKind.Setback: return Die.Setback
+            case DieKind.Force: return Die.Force
+        }
+    }
+
     private constructor(public readonly kind: DieKind, public readonly sides: Array<Side>) { }
 
     roll(): DieResult {
@@ -171,6 +188,7 @@ export class DieResult {
 }
 
 export class Pool {
+
     static empty(): Pool {
         return new Pool([])
     }
@@ -200,6 +218,58 @@ export class Pool {
 
     roll(): PoolResult {
         return new PoolResult(this.dice.map(d => d.roll()))
+    }
+
+    upgrade(modification: PoolModification): Pool {
+
+        const { dieKind, replacedKind } = upgradeModificitaion(modification)
+
+        const die = this.dice.find(die => die.kind === dieKind)
+        if (die !== undefined) {
+            return this.replaceDie(die, Die.ByKind(replacedKind))
+        }
+
+        return this.addDie(Die.ByKind(dieKind))
+    }
+
+    downgrade(modification: PoolModification): Pool {
+
+        const { dieKind, replacedKind } = upgradeModificitaion(modification)
+
+        const die = this.dice.find(die => die.kind === dieKind)
+        if (die !== undefined) {
+            return this.removeDie(die)
+        }
+
+        const dieToReplace = this.dice.find(die => die.kind === replacedKind)
+        if (dieToReplace !== undefined) {
+            return this.replaceDie(dieToReplace, Die.ByKind(dieKind))
+        }
+
+        return new Pool(this.dice)
+    }
+
+    private replaceDie(die: Die, newDie: Die): Pool {
+        const pool = this.removeDie(die)
+        return pool.addDie(newDie)
+    }
+}
+
+function upgradeModificitaion(modification: PoolModification): { dieKind: DieKind, replacedKind: DieKind } {
+    switch (modification) {
+        case PoolModification.Ability:
+            return { dieKind: DieKind.Ability, replacedKind: DieKind.Proficiency }
+        case PoolModification.Difficulty:
+            return { dieKind: DieKind.Difficulty, replacedKind: DieKind.Challange }
+    }
+}
+
+function downgradeModificitaion(modification: PoolModification): { dieKind: DieKind, downgradedDie: Die, newDie: Die } {
+    switch (modification) {
+        case PoolModification.Ability:
+            return { dieKind: DieKind.Proficiency, downgradedDie: Die.Proficiency, newDie: Die.Ability }
+        case PoolModification.Difficulty:
+            return { dieKind: DieKind.Difficulty, downgradedDie: Die.Challange, newDie: Die.Difficulty }
     }
 }
 

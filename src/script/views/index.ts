@@ -1,8 +1,8 @@
 import * as wecco from "@wecco/core"
 import { version } from "../../../package.json"
 import { isClipboardSupported, isSharingSupported } from "../browser"
-import { AddDie, Copy, EmptyPool, Message, RemoveDie, RemoveNumericResult, RollNumeric, RollPool, Share } from "../control"
-import { Die, DieKind, Model, AggregatedPoolResult, Pool, DieSymbol, PoolResult, NumericDieKind, NumericDieResult } from "../models"
+import { AddDie, Copy, EmptyPool, Message, PoolDowngrade, PoolUpgrade, RemoveDie, RemoveNumericResult, RollNumeric, RollPool, Share } from "../control"
+import { Die, DieKind, Model, AggregatedPoolResult, Pool, DieSymbol, PoolResult, NumericDieKind, NumericDieResult, PoolModification } from "../models"
 import { formatPoolResult } from "../utils"
 import { m } from "../utils/i18n"
 import { die, dice } from "./dice"
@@ -15,6 +15,7 @@ export function root(model: Model, context: wecco.AppContext<Message>): wecco.El
             ${pool(model.pool, context)}
             <hr />
             ${toolbar(context)}
+            ${upAndDowngrade(model.pool, context)}
         </div>
     
         ${model.poolResult ? result(model.poolResult, context) : ""}
@@ -35,6 +36,35 @@ export function root(model: Model, context: wecco.AppContext<Message>): wecco.El
     </div>
 
     `)
+}
+
+function upAndDowngrade(pool: Pool, context: wecco.AppContext<Message>): wecco.ElementUpdate {
+    return wecco.html`
+        <div class="level has-text-centered">
+            <div class="level-item ">
+                <div>
+                    <p class="heading">${m("die.ability")}</p>
+                    <p class="buttons are-small">
+                        <button class="button" @click=${()=> context.emit(new
+                            PoolUpgrade(PoolModification.Ability))}>${m("pool.upgrade")}</button>
+                        <button class="button" @click=${()=> context.emit(new
+                            PoolDowngrade(PoolModification.Ability))}>${m("pool.downgrade")}</button>
+                    </p>
+                </div>
+            </div>
+            <div class="level-item">
+                <div>
+                    <p class="heading">${m("die.difficulty")}</p>
+                    <p class="buttons are-small">
+                        <button class="button" @click=${()=> context.emit(new
+                            PoolUpgrade(PoolModification.Difficulty))}>${m("pool.upgrade")}</button>
+                        <button class="button" @click=${()=> context.emit(new
+                            PoolDowngrade(PoolModification.Ability))}>${m("pool.downgrade")}</button>
+                    </p>
+                </div>
+            </div>
+        </div>
+    `
 }
 
 function toolbar(context: wecco.AppContext<Message>): wecco.ElementUpdate {

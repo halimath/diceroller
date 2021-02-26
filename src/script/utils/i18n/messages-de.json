@@ -1,8 +1,10 @@
 {
     "die.d10": "W10",
     "die.d100": "W100",
+    "die.ability": "Begabung",
     "die.ability.initial": "B",
     "die.proficiency.initial": "T",
+    "die.difficulty": "Schwierigkeit",
     "die.difficulty.initial": "S",
     "die.challange.initial": "H",
     "die.boost.initial": "V",
@@ -13,6 +15,8 @@
     "pool.empty.t": "Dein Würfelpool ist leer.",
     "pool.emptyPool.t": "Pool leeren",
     "pool.roll.t": "Würfel rollen",
+    "pool.upgrade": "Aufwerten",
+    "pool.downgrade": "Abwerten",
 
     "result.blank.t": "Kein Symbol",
     "result.success.t.1": "1 Erfolg",
