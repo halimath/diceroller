@@ -222,28 +222,28 @@ export class Pool {
 
     upgrade(modification: PoolModification): Pool {
 
-        const { dieKind, replacedKind } = upgradeModificitaion(modification)
+        const { baseKind, strongerKind } = determineModificationLevel(modification)
 
-        const die = this.dice.find(die => die.kind === dieKind)
+        const die = this.dice.find(die => die.kind === baseKind)
         if (die !== undefined) {
-            return this.replaceDie(die, Die.ByKind(replacedKind))
+            return this.replaceDie(die, Die.ByKind(strongerKind))
         }
 
-        return this.addDie(Die.ByKind(dieKind))
+        return this.addDie(Die.ByKind(baseKind))
     }
 
     downgrade(modification: PoolModification): Pool {
 
-        const { dieKind, replacedKind } = upgradeModificitaion(modification)
+        const { baseKind, strongerKind } = determineModificationLevel(modification)
 
-        const die = this.dice.find(die => die.kind === dieKind)
+        const die = this.dice.find(die => die.kind === baseKind)
         if (die !== undefined) {
             return this.removeDie(die)
         }
 
-        const dieToReplace = this.dice.find(die => die.kind === replacedKind)
+        const dieToReplace = this.dice.find(die => die.kind === strongerKind)
         if (dieToReplace !== undefined) {
-            return this.replaceDie(dieToReplace, Die.ByKind(dieKind))
+            return this.replaceDie(dieToReplace, Die.ByKind(baseKind))
         }
 
         return new Pool(this.dice)
@@ -255,23 +255,15 @@ export class Pool {
     }
 }
 
-function upgradeModificitaion(modification: PoolModification): { dieKind: DieKind, replacedKind: DieKind } {
+function determineModificationLevel(modification: PoolModification): { baseKind: DieKind, strongerKind: DieKind } {
     switch (modification) {
         case PoolModification.Ability:
-            return { dieKind: DieKind.Ability, replacedKind: DieKind.Proficiency }
+            return { baseKind: DieKind.Ability, strongerKind: DieKind.Proficiency }
         case PoolModification.Difficulty:
-            return { dieKind: DieKind.Difficulty, replacedKind: DieKind.Challange }
+            return { baseKind: DieKind.Difficulty, strongerKind: DieKind.Challange }
     }
 }
 
-function downgradeModificitaion(modification: PoolModification): { dieKind: DieKind, downgradedDie: Die, newDie: Die } {
-    switch (modification) {
-        case PoolModification.Ability:
-            return { dieKind: DieKind.Proficiency, downgradedDie: Die.Proficiency, newDie: Die.Ability }
-        case PoolModification.Difficulty:
-            return { dieKind: DieKind.Difficulty, downgradedDie: Die.Challange, newDie: Die.Difficulty }
-    }
-}
 
 export type AggregatedPoolResult = Record<DieSymbol, number>
 
