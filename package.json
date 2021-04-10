@@ -1,6 +1,7 @@
 {
     "name": "diceroller",
     "version": "0.11.2",
+    "versionLabel": "0.11.2",
     "author": {
         "name": "Alexander Metzner",
         "email": "alexander.metzner@gmail.com"
@@ -34,6 +35,7 @@
     },
     "scripts": {
         "build": "webpack --mode=production",
+        "dist": "cp -r public dist && npm run build",
         "lint": "eslint .",
         "start": "webpack serve",
         "test": "mocha --require ts-node/register test/**/*.test.ts"

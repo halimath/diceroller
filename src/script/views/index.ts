@@ -1,5 +1,5 @@
 import * as wecco from "@wecco/core"
-import { version } from "../../../package.json"
+import { versionLabel as version } from "../../../package.json"
 import { isClipboardSupported, isSharingSupported } from "../browser"
 import { AddDie, Copy, EmptyPool, Message, RemoveDie, RemoveNumericResult, RollNumeric, RollPool, Share } from "../control"
 import { Die, DieKind, Model, AggregatedPoolResult, Pool, DieSymbol, PoolResult, NumericDieKind, NumericDieResult } from "../models"
@@ -230,7 +230,7 @@ function appShell(main: wecco.ElementUpdate): wecco.ElementUpdate {
     <footer class="footer is-dark">
         <div class="container">
             <p>DiceRoller v${version}</p>
-            <p>Copyright (c) 2020 Alexander Metzner.</p>
+            <p>Copyright (c) 2020, 2021 Alexander Metzner.</p>
         </div>
     </footer>
     `
