@@ -1,4 +1,4 @@
-import * as wecco from "@wecco/core"
+import * as wecco from "@weccoframework/core"
 
 import { AddDie, RollPool, update } from "./control"
 import { Model, Pool } from "./models"

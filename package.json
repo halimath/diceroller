@@ -8,7 +8,7 @@
     },
     "license": "Apache-2.0",
     "dependencies": {
-        "@wecco/core": "https://bitbucket.org/wecco/core/downloads/wecco-core-0.16.3.tgz",
+        "@weccoframework/core": "^0.21.1",
         "bulma-toast": "^2.2.0"
     },
     "devDependencies": {
