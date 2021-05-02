@@ -1,16 +1,16 @@
 FROM node:14-alpine
 
-ARG version
-ARG date
-ARG vcs_ref
-ARG build_number
-
 RUN apk add m4
 
 WORKDIR /app
 
 COPY package*.json ./
 RUN npm i
+
+ARG version
+ARG date
+ARG vcs_ref
+ARG build_number
 
 RUN node -e "const p = require('./package.json'); p.version = '${version}'; p.versionLabel = '${version} (${build_number}; ${vcs_ref})'; console.log(JSON.stringify(p));" > package.json.mod
 RUN mv package.json.mod package.json

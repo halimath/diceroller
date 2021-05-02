@@ -9,6 +9,7 @@
     "license": "Apache-2.0",
     "dependencies": {
         "@weccoframework/core": "^0.21.1",
+        "@weccoframework/i18n": "^0.1.1",
         "bulma-toast": "^2.2.0"
     },
     "devDependencies": {
