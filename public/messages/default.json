@@ -25,7 +25,7 @@
     },
     "result.triumph.t":{
         "1": "1 Triumph",
-        "n": "{{n}} Triumphs"
+        "n": "{{n}} Triumph"
     },
     "result.failure.t":{
         "1": "1 Failure",

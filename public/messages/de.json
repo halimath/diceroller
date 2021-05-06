@@ -24,8 +24,8 @@
         "n": "{{n}} Vorteile"
     },
     "result.triumph.t":{
-        "1": "1 Triumpf",
-        "n": "{{n}} Triümpfe"
+        "1": "1 Triumph",
+        "n": "{{n}} Triumph"
     },
     "result.failure.t":{
         "1": "1 Fehlschlag",
