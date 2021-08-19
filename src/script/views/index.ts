@@ -1,4 +1,4 @@
-import * as wecco from "@wecco/core"
+import * as wecco from "@weccoframework/core"
 import { version } from "../../../package.json"
 import { isClipboardSupported, isSharingSupported } from "../browser"
 import { AddDie, Copy, EmptyPool, Message, PoolDowngrade, PoolUpgrade, RemoveDie, RemoveNumericResult, RollNumeric, RollPool, Share } from "../control"
@@ -40,30 +40,32 @@ export function root(model: Model, context: wecco.AppContext<Message>): wecco.El
 
 function upAndDowngrade(pool: Pool, context: wecco.AppContext<Message>): wecco.ElementUpdate {
     return wecco.html`
-        <div class="level has-text-centered">
-            <div class="level-item ">
-                <div>
-                    <p class="heading">${m("die.ability")}</p>
-                    <p class="buttons are-small">
-                        <button class="button" @click=${()=> context.emit(new
-                            PoolUpgrade(PoolModification.Ability))}>${m("pool.upgrade")}</button>
-                        <button class="button" @click=${()=> context.emit(new
-                            PoolDowngrade(PoolModification.Ability))}>${m("pool.downgrade")}</button>
-                    </p>
-                </div>
-            </div>
-            <div class="level-item">
-                <div>
-                    <p class="heading">${m("die.difficulty")}</p>
-                    <p class="buttons are-small">
-                        <button class="button" @click=${()=> context.emit(new
-                            PoolUpgrade(PoolModification.Difficulty))}>${m("pool.upgrade")}</button>
-                        <button class="button" @click=${()=> context.emit(new
-                            PoolDowngrade(PoolModification.Ability))}>${m("pool.downgrade")}</button>
-                    </p>
-                </div>
-            </div>
+
+    <div class="columns is-mobile">
+        <div class="column is-3 has-text-centered">
+            <p class="heading">${m("pool.upgrade")}</p>
+            <p class="buttons are-small is-centered">
+                <button class="button is-rounded is-circle" @click=${()=> context.emit(new PoolUpgrade(PoolModification.Ability))}>
+                    <i class="material-icons">arrow_upward</i>
+                </button>
+                <button class="button is-rounded is-circle" @click=${()=> context.emit(new PoolDowngrade(PoolModification.Ability))}>
+                    <i class="material-icons">arrow_downward</i>
+                </button>
+            </p>
         </div>
+        <div class="column is-3 has-text-centered">
+            <p class="heading">${m("pool.difficulty")}</p>
+            <p class="buttons are-small is-centered">
+                <button class="button is-rounded is-circle" @click=${()=> context.emit(new PoolUpgrade(PoolModification.Difficulty))}>
+                    <i class="material-icons">arrow_upward</i>
+                </button>
+                <button class="button is-rounded is-circle" @click=${()=> context.emit(new PoolDowngrade(PoolModification.Difficulty))}>
+                    <i class="material-icons">arrow_downward</i>
+            </button>
+            </p>
+        </div>
+    </div>
+      
     `
 }
 
@@ -80,7 +82,7 @@ function toolbar(context: wecco.AppContext<Message>): wecco.ElementUpdate {
             ${addDie(DieKind.Force, context)}
         </p>
         
-        <p>${m("pool.usage.t")}</p>
+        
     `
 }
 
@@ -100,15 +102,21 @@ function pool(pool: Pool, context: wecco.AppContext<Message>): wecco.ElementUpda
 
     return wecco.html`        
         ${body}
+        
+        
         <p class="buttons is-right">
+
             <button class="button is-outlined is-primary" ?disabled=${pool.empty} @click=${() =>
-                context.emit(new
-        EmptyPool())}><i class="material-icons left">delete</i>${m("pool.emptyPool.t")}</button>
+                    context.emit(new
+                    EmptyPool())}><i class="material-icons left">delete</i>${m("pool.emptyPool.t")}</button>
             <button class="button is-primary" ?disabled=${pool.empty} @click=${() =>
-            context.emit(new RollPool())}>${m("pool.roll.t")}</button>
+                context.emit(new RollPool())}>${m("pool.roll.t")}</button>
         </p>
+     
+       
     `
 }
+
 
 function result(result: PoolResult, context: wecco.AppContext<Message>): wecco.ElementUpdate {
     const normalizedResult = result.normalize()
