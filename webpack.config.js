@@ -46,7 +46,7 @@ module.exports = {
         compress: true,
         host: "0.0.0.0",
         port: 9999,
-        open: true,
+        open: false,
         openPage: 'http://localhost:9999'
     }
 };

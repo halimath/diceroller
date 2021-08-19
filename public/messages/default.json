@@ -1,0 +1,56 @@
+{
+    "die.d10": "D10",
+    "die.d100": "D100",
+    "die.ability.initial": "A",
+    "die.proficiency.initial": "P",
+    "die.difficulty.initial": "D",
+    "die.challange.initial": "C",
+    "die.boost.initial": "B",
+    "die.setback.initial": "S",
+    "die.force.initial": "F",
+
+    "pool.usage.t": "Tap a small die above to add it to the pool. Tap a die from the pool below to remove it.",
+    "pool.empty.t": "Empty pool",
+    "pool.emptyPool.t": "Empty Pool",
+    "pool.roll.t": "Roll",
+
+    "result.blank.t": "Blank",
+    "result.success.t":{
+        "1": "1 Success",
+        "n": "{{n}} Successes"
+    },
+    "result.advantage.t":{
+        "1": "1 Advantage",
+        "n": "{{n}} Advantages"
+    },
+    "result.triumph.t":{
+        "1": "1 Triumph",
+        "n": "{{n}} Triumph"
+    },
+    "result.failure.t":{
+        "1": "1 Failure",
+        "n": "{{n}} Failures"
+    },
+    "result.threat.t":{
+        "1": "1 Threat",
+        "n": "{{n}} Threats"
+    },
+    "result.despair.t":{
+        "1": "1 Despair",
+        "n": "{{n}} Despairs"
+    },
+    "result.lightside.t":{
+        "1": "1 Light Side",
+        "n": "{{n}} Light Sides"
+    },
+    "result.darkside.t":{
+        "1": "1 Dark Side",
+        "n": "{{n}} Dark Sides"
+    },
+
+    "result.details": "Find all symbols shown an the dice rolled below.",
+
+    "result.copied.t": "Copied to clipboard",
+
+    "result.numeric.empty": "You didn't roll a numeric die."
+}

@@ -18,14 +18,15 @@
     @include has-nth('n + #{$quantity}', $element)
         @content
 
-$dieDimension: 3rem
-
 $dieKinds: (ability:$ability, proficiency:$proficiency, difficulty:$difficulty, challange:$challange, boost:$boost, setback:$setback, force: $force)
 
 $die-force: ( stroke: black, singleSymbol: (scale: 0.5, transform-origin: center calc(#{$dieDimension} * 0.55) ))
 
 .die-button
+    @extend .is-unselectable
     @extend .is-clickable
+    width: $dieDimension
+    height: $dieDimension
     &.is-small
         .die
             width: calc(#{$dieDimension} * 0.8)

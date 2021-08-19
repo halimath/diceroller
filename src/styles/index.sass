@@ -7,10 +7,11 @@
 
 @import "_dice"
 
-body>div
-    display: flex
-    min-height: 100vh
-    flex-direction: column
+body
+    #app
+        display: flex
+        min-height: 100vh
+        flex-direction: column
 
 main
     flex: 1 0 auto
@@ -29,7 +30,7 @@ main
     height: 4rem
 
 .empty-pool-message
-    height: $control-height
+    height: #{$dieDimension}
 
 .remove-numeric-result
     cursor: pointer

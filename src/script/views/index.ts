@@ -1,5 +1,5 @@
-import * as wecco from "@wecco/core"
-import { version } from "../../../package.json"
+import * as wecco from "@weccoframework/core"
+import { versionLabel as version } from "../../../package.json"
 import { isClipboardSupported, isSharingSupported } from "../browser"
 import { AddDie, AddDifficulty, Copy, EmptyPool, Message, RemoveDie, RemoveNumericResult, RollNumeric, RollPool, Share } from "../control"
 import { Die, DieKind, Model, AggregatedPoolResult, Pool, DieSymbol, PoolResult, NumericDieKind, NumericDieResult, DifficultyLevel, DieKindOrder, difficultyDiceCount, Difficulty } from "../models"
@@ -61,7 +61,7 @@ function pool(pool: Pool, context: wecco.AppContext<Message>): wecco.ElementUpda
 
 
     if (pool.empty) {
-        body = wecco.html`<p class="has-text-centered empty-pool-message pt-2 mb-5"><em>${m("pool.empty.t")}</em></p>`
+        body = wecco.html`<p class="has-text-centered empty-pool-message pt-2 mb-4"><em>${m("pool.empty.t")}</em></p>`
     } else {
         body = wecco.html`
             <p class="buttons is-centered">
@@ -254,7 +254,7 @@ function appShell(main: wecco.ElementUpdate): wecco.ElementUpdate {
     <footer class="footer is-dark">
         <div class="container">
             <p>DiceRoller v${version}</p>
-            <p>Copyright (c) 2020 Alexander Metzner.</p>
+            <p>Copyright (c) 2020, 2021 Alexander Metzner.</p>
         </div>
     </footer>
     `

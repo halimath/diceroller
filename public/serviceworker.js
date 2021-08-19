@@ -1,6 +1,6 @@
 console.log("Service worker");
 
-const CacheVersion = 7;
+const CacheVersion = 8;
 const CacheName = `diceroller-cache-v${CacheVersion}`;
 
 self.addEventListener("install", e => {
@@ -14,6 +14,8 @@ self.addEventListener("install", e => {
                 "/img/icon-small.png",
                 "/serviceworker.js",
                 "/diceroller.js",
+                "/messages/default.json",
+                "/messages/de.json",
             ]);
         })
     );
