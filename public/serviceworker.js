@@ -14,6 +14,8 @@ self.addEventListener("install", e => {
                 "/img/icon-small.png",
                 "/serviceworker.js",
                 "/diceroller.js",
+                "/messages/default.json",
+                "/messages/de.json",
             ]);
         })
     );
