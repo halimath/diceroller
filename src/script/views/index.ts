@@ -59,7 +59,7 @@ function pool(pool: Pool, context: wecco.AppContext<Message>): wecco.ElementUpda
 
 
     if (pool.empty) {
-        body = wecco.html`<p class="has-text-centered empty-pool-message pt-2 mb-5"><em>${m("pool.empty.t")}</em></p>`
+        body = wecco.html`<p class="has-text-centered empty-pool-message pt-2 mb-4"><em>${m("pool.empty.t")}</em></p>`
     } else {
         body = wecco.html`
             <p class="buttons is-centered">
