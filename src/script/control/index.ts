@@ -1,5 +1,6 @@
 import { copyTextToClipboard, isClipboardSupported, isSharingSupported, notify, shareText } from "../browser"
-import { Die, DieKind, Model, NumericDieResult, NumericDieKind, Pool, DifficultyLevel } from "../models"
+import { Die, DieKind, Model, NumericDieResult, NumericDieKind, Pool, DifficultyLevel, PoolModification } from "../models"
+
 import { formatPoolResult, poolToUrlHash, randomNumber } from "../utils"
 import { m } from "../utils/i18n"
 
@@ -19,6 +20,18 @@ export class RollPool {
 
 export class EmptyPool {
     public readonly command = "empty-pool"
+}
+
+export class PoolUpgrade {
+    public readonly command = "pool-upgrade"
+    constructor(public readonly modification: PoolModification) { }
+
+}
+
+export class PoolDowngrade {
+    public readonly command = "pool-downgrade"
+    constructor(public readonly modification: PoolModification) { }
+
 }
 
 export class RollNumeric {
@@ -43,7 +56,7 @@ export class AddDifficulty {
     constructor(public readonly difficulty: DifficultyLevel) { }
 }
 
-export type Message = AddDie | RemoveDie | RollPool | EmptyPool | Copy | Share | RollNumeric | RemoveNumericResult | AddDifficulty
+export type Message = AddDie | RemoveDie | RollPool | EmptyPool | Copy | Share | RollNumeric | RemoveNumericResult | AddDifficulty | PoolUpgrade | PoolDowngrade
 
 export function update(model: Model, msg: Message): Model {
     let p: Pool
@@ -105,6 +118,12 @@ export function update(model: Model, msg: Message): Model {
 
             return new Model(p, model.poolResult, model.numericDieResult)
 
+        case "pool-upgrade":
+            p = model.pool.upgrade(msg.modification)
+            return new Model(p, model.poolResult, model.numericDieResult)
+        case "pool-downgrade":
+            p = model.pool.downgrade(msg.modification)
+            return new Model(p, model.poolResult, model.numericDieResult)
     }
 }
 

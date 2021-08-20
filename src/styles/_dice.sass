@@ -28,6 +28,8 @@ $die-force: ( stroke: black, singleSymbol: (scale: 0.5, transform-origin: center
     width: $dieDimension
     height: $dieDimension
     &.is-small
+        width: calc(#{$dieDimension} * 0.9)
+        height: calc(#{$dieDimension} * 0.9)
         .die
             width: calc(#{$dieDimension} * 0.8)
             height: calc(#{$dieDimension} * 0.8)

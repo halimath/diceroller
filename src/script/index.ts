@@ -11,7 +11,7 @@ import "../styles/index.sass"
 
 document.addEventListener("DOMContentLoaded", async () => {
     await load()
-    
+
     const context = wecco.app(() => new Model(Pool.empty()), update, root, "#app")
     if (document.location.hash.length > 0) {
         document.location.hash.substr(1).split("").forEach(c => {
