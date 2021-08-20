@@ -2,11 +2,11 @@ import * as wecco from "@weccoframework/core"
 import { versionLabel as version } from "../../../package.json"
 import { isClipboardSupported, isSharingSupported } from "../browser"
 import { AddDie, AddDifficulty, Copy, EmptyPool, Message, PoolDowngrade, PoolUpgrade, RemoveDie, RemoveNumericResult, RollNumeric, RollPool, Share } from "../control"
-import { Die, DieKind, Model, AggregatedPoolResult, Pool, DieSymbol, PoolResult, NumericDieKind, NumericDieResult, PoolModification, DifficultyLevel, DieKindOrder, difficultyDiceCount, Difficulty } from "../models"
+import { Die, DieKind, Model, AggregatedPoolResult, Pool, DieSymbol, PoolResult, NumericDieKind, NumericDieResult, PoolModification, Difficulty } from "../models"
 
 import { formatPoolResult } from "../utils"
 import { m } from "../utils/i18n"
-import { die, dice, dieShape } from "./dice"
+import { die, dice } from "./dice"
 
 export function root(model: Model, context: wecco.AppContext<Message>): wecco.ElementUpdate {
     return appShell(wecco.html`
@@ -16,9 +16,7 @@ export function root(model: Model, context: wecco.AppContext<Message>): wecco.El
             ${pool(model.pool, context)}
             <hr />
             ${toolbar(context)}
-
             ${options(model.pool, context)}
-            
         </div>
     
         ${model.poolResult ? result(model.poolResult, context) : ""}
@@ -125,8 +123,6 @@ function pool(pool: Pool, context: wecco.AppContext<Message>): wecco.ElementUpda
 
     return wecco.html`        
         ${body}
-        
-        
         <p class="buttons is-right">
 
             <button class="button is-outlined is-primary" ?disabled=${pool.empty} @click=${() =>
@@ -135,8 +131,6 @@ function pool(pool: Pool, context: wecco.AppContext<Message>): wecco.ElementUpda
             <button class="button is-primary" ?disabled=${pool.empty} @click=${() =>
                 context.emit(new RollPool())}>${m("pool.roll.t")}</button>
         </p>
-     
-       
     `
 }
 
@@ -162,17 +156,6 @@ function addDifficulty(difficulty: Difficulty, context: wecco.AppContext<Message
                     ${m(`difficulty.${difficulty.level}`)}            
 
         </button>
-    `
-}
-
-function addDifficultyIcons(count: number): wecco.ElementUpdate {
-const result =[]
-    for(let i = 0; i<count;i++) {
-        result.push(die(DieKind.Difficulty, ""))
-    }
-
-    return wecco.html`
-        ${result}
     `
 }
 
