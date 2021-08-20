@@ -95,15 +95,16 @@ export function update(model: Model, msg: Message): Model {
         case "remove-numeric-result":
             return new Model(model.pool, model.poolResult)
         case "add-difficulty":
-            const difficultyDice = selectDifficultyDice(msg.difficulty)
+
             p = model.pool.clear(DieKind.Difficulty)
 
-            difficultyDice.forEach(() => {
+            selectDifficultyDice(msg.difficulty).forEach(() => {
                 p = p.addDie(Die.Difficulty)
             })
             history.replaceState(null, "", `/#${poolToUrlHash(p)}`)
 
             return new Model(p, model.poolResult, model.numericDieResult)
+
     }
 }
 
