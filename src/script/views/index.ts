@@ -167,19 +167,24 @@ function result(result: PoolResult, context: wecco.AppContext<Message>): wecco.E
     <div class="column is-half-desktop">
         <p class="has-text-centered">
             ${resultIcons(normalizedResult)}
-            ${resultText(normalizedResult)}
         </p>
+        <p class="is-size-5 has-text-centered">
+            ${formatPoolResult(normalizedResult)}
+        </p>
+
         <div class="buttons is-right">
             ${isClipboardSupported() ? wecco.html`<a class="button is-primary" @click=${() => context.emit(new Copy())}><i
                     class="material-icons">content_copy</i></a>` : ""}
             ${isSharingSupported() ? wecco.html`<a class="button is-primary" @click=${() => context.emit(new Share())}><i
                     class="material-icons">share</i></a>` : ""}
         </div>
-        <p>${m("result.details")}</p>
+        <p class="has-text-centered">${m("result.details")}</p>
     
         <p class="has-text-centered aggregated-result">
             ${dice(result.dieResults)}
-            <p>${formatPoolResult(aggregatedResult)}</p>
+        </p>
+        <p class="has-text-centered">
+            ${formatPoolResult(aggregatedResult)}
         </p>
     </div>
     `
@@ -200,7 +205,7 @@ function numericResult(result: NumericDieResult | undefined, context: wecco.AppC
 }
 
 function resultText(result: AggregatedPoolResult): wecco.ElementUpdate {
-    return wecco.html`<p class="is-size-5"> ${formatPoolResult(result)} </p>`
+    return wecco.html`<p class="is-size-5 has-text-centered"> ${formatPoolResult(result)} </p>`
 }
 
 function resultIcons(result: AggregatedPoolResult): wecco.ElementUpdate {
