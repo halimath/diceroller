@@ -257,7 +257,7 @@ export class Pool {
         return new Pool(sortedDice)
     }
 
-    clear(kind: DieKind) {
+    clear(kind: DieKind): Pool {
         const dice = [...(this.dice)].filter(die => die.kind !== kind)
 
         return new Pool(dice)
