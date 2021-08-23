@@ -311,7 +311,7 @@ function appShell(main: wecco.ElementUpdate): wecco.ElementUpdate {
     <footer class="footer is-dark">
         <div class="container">
             <p>DiceRoller v${version}</p>
-            <p>Copyright (c) 2020, 2021 Alexander Metzner.</p>
+            <p>Copyright (c) 2020, 2021 Alexander Metzner, Christoph Neumann.</p>
         </div>
     </footer>
     `

@@ -6,6 +6,12 @@
         "name": "Alexander Metzner",
         "email": "alexander.metzner@gmail.com"
     },
+    "contributors": [
+        {
+            "name": "Christoph Neumann",
+            "email": "derceti@gmail.com"
+        }
+    ],
     "license": "Apache-2.0",
     "dependencies": {
         "@weccoframework/core": "^0.21.1",
