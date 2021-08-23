@@ -16,7 +16,7 @@ export function root(model: Model, context: wecco.AppContext<Message>): wecco.El
             ${pool(model.pool, context)}
             <hr />
             ${toolbar(context)}
-            ${options(model.pool, context)}
+            ${options(context)}
         </div>
     
         ${model.poolResult ? result(model.poolResult, context) : ""}
@@ -39,28 +39,29 @@ export function root(model: Model, context: wecco.AppContext<Message>): wecco.El
     `)
 }
 
-function options(pool: Pool, context: wecco.AppContext<Message>): wecco.ElementUpdate {
+function options(context: wecco.AppContext<Message>): wecco.ElementUpdate {
     return wecco.html`
         <div class="columns is-mobile">
             <div class="column is-one-third">
                 <div class="columns">
                     <div class="column  has-text-centered">
-                        ${upgrade(pool, context)}
+                        ${upOrDowngradeAbility(context)}
                         
                     </div>
                     <div class="column has-text-centered">
-                        ${downgrade(pool, context)}
+                        ${upOrDowngradeDifficulty(context)}
                     </div>
                 </div>
             </div>
             <div class="column is-two-thirds has-text-centered">
-                ${difficulty(pool, context)}
+                ${difficulty(context)}
             </div>    
         </div>
     `
 }
 
-function upgrade(pool: Pool, context: wecco.AppContext<Message>): wecco.ElementUpdate {
+
+function upOrDowngradeAbility(context: wecco.AppContext<Message>): wecco.ElementUpdate {
     return wecco.html`
         <p class="heading">${m("die.ability")}</p>
         <p class="buttons are-small is-centered">
@@ -74,7 +75,7 @@ function upgrade(pool: Pool, context: wecco.AppContext<Message>): wecco.ElementU
     `
 }
 
-function downgrade(pool: Pool, context: wecco.AppContext<Message>): wecco.ElementUpdate {
+function upOrDowngradeDifficulty(context: wecco.AppContext<Message>): wecco.ElementUpdate {
     return wecco.html`
         <p class="heading">${m("die.difficulty")}</p>
         <p class="buttons are-small is-centered">
@@ -132,7 +133,7 @@ function pool(pool: Pool, context: wecco.AppContext<Message>): wecco.ElementUpda
     `
 }
 
-function difficulty(pool: Pool, context: wecco.AppContext<Message>): wecco.ElementUpdate {
+function difficulty(context: wecco.AppContext<Message>): wecco.ElementUpdate {
     return wecco.html`
         <p class="heading">Probe</p>
         <div class="buttons are-small is-centered">
@@ -202,10 +203,6 @@ function numericResult(result: NumericDieResult | undefined, context: wecco.AppC
     `
 }
 
-function resultText(result: AggregatedPoolResult): wecco.ElementUpdate {
-    return wecco.html`<p class="is-size-5 has-text-centered"> ${formatPoolResult(result)} </p>`
-}
-
 function resultIcons(result: AggregatedPoolResult): wecco.ElementUpdate {
     const symbols: Array<wecco.ElementUpdate> = []
 
@@ -265,7 +262,6 @@ function determineNumericStyle(numericDieKind: NumericDieKind): [string, string]
             return ["is-d-100", "die.d100"]
     }
 }
-
 
 function determineLabelKey(die: DieKind): string {
     switch (die) {
