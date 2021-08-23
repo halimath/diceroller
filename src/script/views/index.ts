@@ -40,31 +40,29 @@ export function root(model: Model, context: wecco.AppContext<Message>): wecco.El
 }
 
 function options(pool: Pool, context: wecco.AppContext<Message>): wecco.ElementUpdate {
-
     return wecco.html`
-
-    <div class="columns is-mobile">
-        <div class="column is-one-third">
-            <div class="columns">
-                <div class="column  has-text-centered">
-                    ${upgrade(pool, context)}
-                    
-                </div>
-                <div class="column has-text-centered">
-                    ${downgrade(pool, context)}
+        <div class="columns is-mobile">
+            <div class="column is-one-third">
+                <div class="columns">
+                    <div class="column  has-text-centered">
+                        ${upgrade(pool, context)}
+                        
+                    </div>
+                    <div class="column has-text-centered">
+                        ${downgrade(pool, context)}
+                    </div>
                 </div>
             </div>
+            <div class="column is-two-thirds has-text-centered">
+                ${difficulty(pool, context)}
+            </div>    
         </div>
-        <div class="column is-two-thirds has-text-centered">
-            ${difficulty(pool, context)}
-        </div>    
-    </div>
     `
 }
 
 function upgrade(pool: Pool, context: wecco.AppContext<Message>): wecco.ElementUpdate {
     return wecco.html`
-        <p class="heading">${m("pool.upgrade")}</p>
+        <p class="heading">${m("die.ability")}</p>
         <p class="buttons are-small is-centered">
             <button class="button is-rounded is-circle" @click=${()=> context.emit(new PoolUpgrade(PoolModification.Ability))}>
                 <i class="material-icons">arrow_upward</i>
@@ -78,7 +76,7 @@ function upgrade(pool: Pool, context: wecco.AppContext<Message>): wecco.ElementU
 
 function downgrade(pool: Pool, context: wecco.AppContext<Message>): wecco.ElementUpdate {
     return wecco.html`
-        <p class="heading">${m("pool.downgrade")}</p>
+        <p class="heading">${m("die.difficulty")}</p>
         <p class="buttons are-small is-centered">
             <button class="button is-rounded is-circle" @click=${()=> context.emit(new PoolUpgrade(PoolModification.Difficulty))}>
                 <i class="material-icons">arrow_upward</i>
