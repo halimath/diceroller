@@ -1,18 +1,29 @@
 {
     "die.d10": "D10",
     "die.d100": "D100",
+    "die.ability": "Ability",
     "die.ability.initial": "A",
     "die.proficiency.initial": "P",
+    "die.difficulty": "Difficulty",
     "die.difficulty.initial": "D",
     "die.challange.initial": "C",
     "die.boost.initial": "B",
     "die.setback.initial": "S",
     "die.force.initial": "F",
 
+    "difficulty.easy": "Easy",
+    "difficulty.average": "Average",
+    "difficulty.hard": "Hard",
+    "difficulty.daunting": "Daunting",
+    "difficulty.formidable": "Formidable",
+
     "pool.usage.t": "Tap a small die above to add it to the pool. Tap a die from the pool below to remove it.",
     "pool.empty.t": "Empty pool",
     "pool.emptyPool.t": "Empty Pool",
     "pool.roll.t": "Roll",
+    "pool.difficulty": "Difficulty",
+    "pool.upgrade": "Upgrade",
+    "pool.downgrade": "Downgrade",
 
     "result.blank.t": "Blank",
     "result.success.t":{

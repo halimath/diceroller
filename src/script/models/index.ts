@@ -38,6 +38,52 @@ export enum NumericDieKind {
     D100 = "hundred"
 }
 
+export enum DifficultyLevel {
+    Easy = "easy",
+    Average = "average",
+    Hard = "hard",
+    Daunting = "daunting",
+    Formidable = "formidable",
+}
+
+
+
+export const difficultyDiceCount = new Map([
+    [DifficultyLevel.Easy, 1],
+    [DifficultyLevel.Average, 2],
+    [DifficultyLevel.Hard, 3],
+    [DifficultyLevel.Daunting, 4],
+    [DifficultyLevel.Formidable, 5]
+])
+
+export class Difficulty {
+
+    static get Easy(): Difficulty {
+        return new Difficulty(DifficultyLevel.Easy, 1)
+    }
+
+    static get Average(): Difficulty {
+        return new Difficulty(DifficultyLevel.Average, 2)
+    }
+    static get Hard(): Difficulty {
+        return new Difficulty(DifficultyLevel.Hard, 3)
+    }
+    static get Daunting(): Difficulty {
+        return new Difficulty(DifficultyLevel.Daunting, 4)
+    }
+    static get Formidable(): Difficulty {
+        return new Difficulty(DifficultyLevel.Formidable, 5)
+    }
+
+    private constructor(public readonly level: DifficultyLevel, public readonly diceCount: number) { }
+}
+
+
+export enum PoolModification {
+    Ability,
+    Difficulty
+}
+
 export class Die {
     static get Ability(): Die {
         return new Die(DieKind.Ability,
@@ -146,6 +192,18 @@ export class Die {
             ])
     }
 
+    static ByKind(kind: DieKind): Die {
+        switch (kind) {
+            case DieKind.Ability: return Die.Ability
+            case DieKind.Boost: return Die.Boost
+            case DieKind.Challange: return Die.Challange
+            case DieKind.Difficulty: return Die.Difficulty
+            case DieKind.Proficiency: return Die.Proficiency
+            case DieKind.Setback: return Die.Setback
+            case DieKind.Force: return Die.Force
+        }
+    }
+
     private constructor(public readonly kind: DieKind, public readonly sides: Array<Side>) { }
 
     roll(): DieResult {
@@ -171,6 +229,7 @@ export class DieResult {
 }
 
 export class Pool {
+
     static empty(): Pool {
         return new Pool([])
     }
@@ -198,10 +257,60 @@ export class Pool {
         return new Pool(sortedDice)
     }
 
+    clear(kind: DieKind): Pool {
+        const dice = [...(this.dice)].filter(die => die.kind !== kind)
+
+        return new Pool(dice)
+    }
+
     roll(): PoolResult {
         return new PoolResult(this.dice.map(d => d.roll()))
     }
+
+    upgrade(modification: PoolModification): Pool {
+
+        const { baseKind, strongerKind } = determineModificationLevel(modification)
+
+        const die = this.dice.find(die => die.kind === baseKind)
+        if (die !== undefined) {
+            return this.replaceDie(die, Die.ByKind(strongerKind))
+        }
+
+        return this.addDie(Die.ByKind(baseKind))
+    }
+
+    downgrade(modification: PoolModification): Pool {
+
+        const { baseKind, strongerKind } = determineModificationLevel(modification)
+
+        const die = this.dice.find(die => die.kind === baseKind)
+        if (die !== undefined) {
+            return this.removeDie(die)
+        }
+
+        const dieToReplace = this.dice.find(die => die.kind === strongerKind)
+        if (dieToReplace !== undefined) {
+            return this.replaceDie(dieToReplace, Die.ByKind(baseKind))
+        }
+
+        return new Pool(this.dice)
+    }
+
+    private replaceDie(die: Die, newDie: Die): Pool {
+        const pool = this.removeDie(die)
+        return pool.addDie(newDie)
+    }
 }
+
+function determineModificationLevel(modification: PoolModification): { baseKind: DieKind, strongerKind: DieKind } {
+    switch (modification) {
+        case PoolModification.Ability:
+            return { baseKind: DieKind.Ability, strongerKind: DieKind.Proficiency }
+        case PoolModification.Difficulty:
+            return { baseKind: DieKind.Difficulty, strongerKind: DieKind.Challange }
+    }
+}
+
 
 export type AggregatedPoolResult = Record<DieSymbol, number>
 

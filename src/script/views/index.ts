@@ -1,8 +1,9 @@
 import * as wecco from "@weccoframework/core"
 import { versionLabel as version } from "../../../package.json"
 import { isClipboardSupported, isSharingSupported } from "../browser"
-import { AddDie, Copy, EmptyPool, Message, RemoveDie, RemoveNumericResult, RollNumeric, RollPool, Share } from "../control"
-import { Die, DieKind, Model, AggregatedPoolResult, Pool, DieSymbol, PoolResult, NumericDieKind, NumericDieResult } from "../models"
+import { AddDie, AddDifficulty, Copy, EmptyPool, Message, PoolDowngrade, PoolUpgrade, RemoveDie, RemoveNumericResult, RollNumeric, RollPool, Share } from "../control"
+import { Die, DieKind, Model, AggregatedPoolResult, Pool, DieSymbol, PoolResult, NumericDieKind, NumericDieResult, PoolModification, Difficulty } from "../models"
+
 import { formatPoolResult } from "../utils"
 import { m } from "../utils/i18n"
 import { die, dice } from "./dice"
@@ -15,6 +16,7 @@ export function root(model: Model, context: wecco.AppContext<Message>): wecco.El
             ${pool(model.pool, context)}
             <hr />
             ${toolbar(context)}
+            ${options(context)}
         </div>
     
         ${model.poolResult ? result(model.poolResult, context) : ""}
@@ -37,6 +39,56 @@ export function root(model: Model, context: wecco.AppContext<Message>): wecco.El
     `)
 }
 
+function options(context: wecco.AppContext<Message>): wecco.ElementUpdate {
+    return wecco.html`
+        <div class="columns is-mobile">
+            <div class="column is-one-third">
+                <div class="columns">
+                    <div class="column  has-text-centered">
+                        ${upOrDowngradeAbility(context)}
+                        
+                    </div>
+                    <div class="column has-text-centered">
+                        ${upOrDowngradeDifficulty(context)}
+                    </div>
+                </div>
+            </div>
+            <div class="column is-two-thirds has-text-centered">
+                ${difficulty(context)}
+            </div>    
+        </div>
+    `
+}
+
+
+function upOrDowngradeAbility(context: wecco.AppContext<Message>): wecco.ElementUpdate {
+    return wecco.html`
+        <p class="heading">${m("die.ability")}</p>
+        <p class="buttons are-small is-centered">
+            <button class="button is-rounded is-circle" @click=${()=> context.emit(new PoolUpgrade(PoolModification.Ability))}>
+                <i class="material-icons">arrow_upward</i>
+            </button>
+            <button class="button is-rounded is-circle" @click=${()=> context.emit(new PoolDowngrade(PoolModification.Ability))}>
+                <i class="material-icons">arrow_downward</i>
+            </button>
+        </p>
+    `
+}
+
+function upOrDowngradeDifficulty(context: wecco.AppContext<Message>): wecco.ElementUpdate {
+    return wecco.html`
+        <p class="heading">${m("die.difficulty")}</p>
+        <p class="buttons are-small is-centered">
+            <button class="button is-rounded is-circle" @click=${()=> context.emit(new PoolUpgrade(PoolModification.Difficulty))}>
+                <i class="material-icons">arrow_upward</i>
+            </button>
+            <button class="button is-rounded is-circle" @click=${()=> context.emit(new PoolDowngrade(PoolModification.Difficulty))}>
+                <i class="material-icons">arrow_downward</i>
+            </button>
+        </p>
+    `
+}
+
 function toolbar(context: wecco.AppContext<Message>): wecco.ElementUpdate {
     return wecco.html`
     
@@ -50,7 +102,7 @@ function toolbar(context: wecco.AppContext<Message>): wecco.ElementUpdate {
             ${addDie(DieKind.Force, context)}
         </p>
         
-        <p>${m("pool.usage.t")}</p>
+        
     `
 }
 
@@ -71,12 +123,38 @@ function pool(pool: Pool, context: wecco.AppContext<Message>): wecco.ElementUpda
     return wecco.html`        
         ${body}
         <p class="buttons is-right">
+
             <button class="button is-outlined is-primary" ?disabled=${pool.empty} @click=${() =>
-                context.emit(new
-        EmptyPool())}><i class="material-icons left">delete</i>${m("pool.emptyPool.t")}</button>
+                    context.emit(new
+                    EmptyPool())}><i class="material-icons left">delete</i>${m("pool.emptyPool.t")}</button>
             <button class="button is-primary" ?disabled=${pool.empty} @click=${() =>
-            context.emit(new RollPool())}>${m("pool.roll.t")}</button>
+                context.emit(new RollPool())}>${m("pool.roll.t")}</button>
         </p>
+    `
+}
+
+function difficulty(context: wecco.AppContext<Message>): wecco.ElementUpdate {
+    return wecco.html`
+        <p class="heading">Probe</p>
+        <div class="buttons are-small is-centered">
+            ${addDifficulty(Difficulty.Easy, context)}
+            ${addDifficulty(Difficulty.Average, context)}
+            ${addDifficulty(Difficulty.Hard, context)}
+            ${addDifficulty(Difficulty.Daunting, context)}
+            ${addDifficulty(Difficulty.Formidable, context)}
+        </div>
+
+    `
+}
+
+function addDifficulty(difficulty: Difficulty, context: wecco.AppContext<Message>): wecco.ElementUpdate {
+    return wecco.html`       
+        <button class="button is-rounded is-difficulty is-outlined" @click=${()=> context.emit(new
+            AddDifficulty(difficulty.level))}>
+
+                    ${m(`difficulty.${difficulty.level}`)}            
+
+        </button>
     `
 }
 
@@ -88,20 +166,24 @@ function result(result: PoolResult, context: wecco.AppContext<Message>): wecco.E
     <div class="column is-half-desktop">
         <p class="has-text-centered">
             ${resultIcons(normalizedResult)}
-            ${resultText(normalizedResult)}
         </p>
+        <p class="is-size-5 has-text-centered">
+            ${formatPoolResult(normalizedResult)}
+        </p>
+
         <div class="buttons is-right">
             ${isClipboardSupported() ? wecco.html`<a class="button is-primary" @click=${() => context.emit(new Copy())}><i
                     class="material-icons">content_copy</i></a>` : ""}
             ${isSharingSupported() ? wecco.html`<a class="button is-primary" @click=${() => context.emit(new Share())}><i
                     class="material-icons">share</i></a>` : ""}
         </div>
-        <p>${m("result.details")}</p>
+        <p class="has-text-centered">${m("result.details")}</p>
     
         <p class="has-text-centered aggregated-result">
             ${dice(result.dieResults)}
-            <p>${formatPoolResult(aggregatedResult)}</p>
-    
+        </p>
+        <p class="has-text-centered">
+            ${formatPoolResult(aggregatedResult)}
         </p>
     </div>
     `
@@ -119,10 +201,6 @@ function numericResult(result: NumericDieResult | undefined, context: wecco.AppC
         </div>
     </p>
     `
-}
-
-function resultText(result: AggregatedPoolResult): wecco.ElementUpdate {
-    return wecco.html`<p class="is-size-4">${formatPoolResult(result)}</p>`
 }
 
 function resultIcons(result: AggregatedPoolResult): wecco.ElementUpdate {
@@ -158,7 +236,7 @@ function removeDie(die: Die, context: wecco.AppContext<Message>): wecco.ElementU
 }
 
 function addDie(die: DieKind, context: wecco.AppContext<Message>): wecco.ElementUpdate {
-    return dieButton(die, "is-small", new AddDie(die), context)
+    return dieButton(die, "is-small has-text-centered", new AddDie(die), context)
 }
 
 function dieButton(kind: DieKind, additionalStyleClasses: string, msg: Message, context: wecco.AppContext<Message>): wecco.ElementUpdate {
@@ -184,7 +262,6 @@ function determineNumericStyle(numericDieKind: NumericDieKind): [string, string]
             return ["is-d-100", "die.d100"]
     }
 }
-
 
 function determineLabelKey(die: DieKind): string {
     switch (die) {
@@ -230,7 +307,7 @@ function appShell(main: wecco.ElementUpdate): wecco.ElementUpdate {
     <footer class="footer is-dark">
         <div class="container">
             <p>DiceRoller v${version}</p>
-            <p>Copyright (c) 2020, 2021 Alexander Metzner.</p>
+            <p>Copyright (c) 2020, 2021 Alexander Metzner, Christoph Neumann.</p>
         </div>
     </footer>
     `

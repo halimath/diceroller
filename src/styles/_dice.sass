@@ -28,9 +28,17 @@ $die-force: ( stroke: black, singleSymbol: (scale: 0.5, transform-origin: center
     width: $dieDimension
     height: $dieDimension
     &.is-small
+        width: calc(#{$dieDimension} * 0.9)
+        height: calc(#{$dieDimension} * 0.9)
         .die
             width: calc(#{$dieDimension} * 0.8)
             height: calc(#{$dieDimension} * 0.8)
+
+.shape
+    @extend .icon
+    @each $kind, $color in $dieKinds
+        &-#{$kind}
+            fill: $color
 .die
     width: $dieDimension
     height: $dieDimension
@@ -41,10 +49,7 @@ $die-force: ( stroke: black, singleSymbol: (scale: 0.5, transform-origin: center
         stroke: black
     &.die-challange, &.die-difficulty, &.die-setback
         fill: white !important
-    .shape
-        @each $kind, $color in $dieKinds
-            &-#{$kind}
-                fill: $color
+
     .text text
         transform-origin: center center
 
@@ -88,3 +93,6 @@ $die-force: ( stroke: black, singleSymbol: (scale: 0.5, transform-origin: center
                 &:nth-child(2)>*
                     transform-origin: calc(#{$dieDimension} * 0.8) calc(#{$dieDimension} * 0.8)
                     transform: scale(0.35)
+    .are-small &
+        width: calc(#{$dieDimension} * 0.3)
+        height: calc(#{$dieDimension} * 0.3)
