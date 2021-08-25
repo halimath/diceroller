@@ -8,7 +8,6 @@ COPY package*.json ./
 RUN npm i
 
 ARG version
-ARG date
 ARG vcs_ref
 ARG build_number
 
