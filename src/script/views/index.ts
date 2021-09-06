@@ -46,7 +46,6 @@ function options(context: wecco.AppContext<Message>): wecco.ElementUpdate {
                 <div class="columns">
                     <div class="column  has-text-centered">
                         ${upOrDowngradeAbility(context)}
-                        
                     </div>
                     <div class="column has-text-centered">
                         ${upOrDowngradeDifficulty(context)}
@@ -60,11 +59,10 @@ function options(context: wecco.AppContext<Message>): wecco.ElementUpdate {
     `
 }
 
-
 function upOrDowngradeAbility(context: wecco.AppContext<Message>): wecco.ElementUpdate {
     return wecco.html`
         <p class="heading">${m("die.ability")}</p>
-        <p class="buttons are-small is-centered">
+        <p class="buttons are-small is-centered is-flex-wrap-nowrap">
             <button class="button is-rounded is-circle" @click=${()=> context.emit(new PoolUpgrade(PoolModification.Ability))}>
                 <i class="material-icons">arrow_upward</i>
             </button>
@@ -78,7 +76,7 @@ function upOrDowngradeAbility(context: wecco.AppContext<Message>): wecco.Element
 function upOrDowngradeDifficulty(context: wecco.AppContext<Message>): wecco.ElementUpdate {
     return wecco.html`
         <p class="heading">${m("die.difficulty")}</p>
-        <p class="buttons are-small is-centered">
+        <p class="buttons are-small is-centered is-flex-wrap-nowrap">
             <button class="button is-rounded is-circle" @click=${()=> context.emit(new PoolUpgrade(PoolModification.Difficulty))}>
                 <i class="material-icons">arrow_upward</i>
             </button>
