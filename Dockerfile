@@ -22,8 +22,9 @@ COPY webpack.config.js ./
 RUN npm run dist
 
 RUN m4 --define=VERSION="${version} (${vcs_ref})" dist/index.html > index.html
-RUN sed -Ee "s/diceroller\\./diceroller.${build_number}./" index.html > dist/index.html
-RUN sed -Ee "s/^const CacheVersion =.*$/const CacheVersion = ${build_number};/" public/serviceworker.js > dist/serviceworker.js
+RUN sed -Ee "s/serviceworker\\./serviceworker.${build_number}./" index.html > /tmp/index.html
+RUN sed -Ee "s/diceroller\\./diceroller.${build_number}./" /tmp/index.html > dist/index.html
+RUN sed -Ee "s/^const CacheVersion =.*$/const CacheVersion = ${build_number};/" public/serviceworker.js > dist/serviceworker.${build_number}.js
 RUN mv dist/css/diceroller.css dist/css/diceroller.${build_number}.css
 RUN mv dist/diceroller.js dist/diceroller.${build_number}.js
 
