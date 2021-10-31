@@ -1,5 +1,5 @@
-VERSION = 0.13.1
-BUILD_NUMBER = 13
+VERSION = 0.13.2
+BUILD_NUMBER = 14
 CWD = $(shell pwd)
 VCS_REF = $(shell git rev-parse --short HEAD)
 
