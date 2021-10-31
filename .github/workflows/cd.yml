@@ -1,0 +1,22 @@
+name: CD
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+     
+      - name: Build container image
+        run: docker build -t ghcr.io/halimath/diceroller:${{ github.sha }} .
+
+      - name: Login to ghcr.io
+        run: echo ${{ secrets.GHCR_TOKEN }} | docker login ghcr.io -u ${{ github.repository_owner }} --password-stdin
+
+      - name: Push container image
+        run: docker push ghcr.io/halimath/diceroller:${{ github.sha }}

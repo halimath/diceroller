@@ -1,5 +1,9 @@
 # diceroller
 
+[![CI Status](https://github.com/halimath/diceroller/workflows/CI/badge.svg)](https://github.com/halimath/diceroller/actions/workflows/ci.yml)
+[![CD Status](https://github.com/halimath/diceroller/workflows/CD/badge.svg)](https://github.com/halimath/diceroller/actions/workflows/cd.yml)
+
+
 A progressive web application for rolling dice of the [SW role playing game series](https://www.fantasyflightgames.com/en/starwarsrpg/).
 
 The app is online available at [https://diceroller.wilanthaou.de/](https://diceroller.wilanthaou.de/).
