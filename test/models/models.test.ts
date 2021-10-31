@@ -57,8 +57,8 @@ describe("Models", () => {
         describe("normalize", () => {
             it("should normalized success and failure", () => {
                 const r = new PoolResult([
-                    new DieResult([DieSymbol.Success, DieSymbol.Success]),
-                    new DieResult([DieSymbol.Failure]),
+                    new DieResult(DieKind.Ability, [DieSymbol.Success, DieSymbol.Success]),
+                    new DieResult(DieKind.Difficulty, [DieSymbol.Failure]),
                 ])
 
                 expect(r.normalize()).to.deep.equal({
@@ -75,8 +75,8 @@ describe("Models", () => {
 
             it("should normalized failure and success", () => {
                 const r = new PoolResult([
-                    new DieResult([DieSymbol.Failure, DieSymbol.Failure]),
-                    new DieResult([DieSymbol.Success]),
+                    new DieResult(DieKind.Ability, [DieSymbol.Failure, DieSymbol.Failure]),
+                    new DieResult(DieKind.Difficulty, [DieSymbol.Success]),
                 ])
 
                 expect(r.normalize()).to.deep.equal({
@@ -93,8 +93,8 @@ describe("Models", () => {
 
             it("should normalized advantage and threat", () => {
                 const r = new PoolResult([
-                    new DieResult([DieSymbol.Advantage, DieSymbol.Advantage]),
-                    new DieResult([DieSymbol.Threat]),
+                    new DieResult(DieKind.Ability, [DieSymbol.Advantage, DieSymbol.Advantage]),
+                    new DieResult(DieKind.Difficulty, [DieSymbol.Threat]),
                 ])
 
                 expect(r.normalize()).to.deep.equal({
@@ -111,8 +111,8 @@ describe("Models", () => {
 
             it("should normalized threat and advantage", () => {
                 const r = new PoolResult([
-                    new DieResult([DieSymbol.Threat, DieSymbol.Threat]),
-                    new DieResult([DieSymbol.Advantage]),
+                    new DieResult(DieKind.Ability, [DieSymbol.Threat, DieSymbol.Threat]),
+                    new DieResult(DieKind.Difficulty, [DieSymbol.Advantage]),
                 ])
 
                 expect(r.normalize()).to.deep.equal({
@@ -129,8 +129,8 @@ describe("Models", () => {
 
             it("should normalized triumph", () => {
                 const r = new PoolResult([
-                    new DieResult([DieSymbol.Success, DieSymbol.Triumph]),
-                    new DieResult([DieSymbol.Failure]),
+                    new DieResult(DieKind.Proficiency, [DieSymbol.Success, DieSymbol.Triumph]),
+                    new DieResult(DieKind.Difficulty, [DieSymbol.Failure]),
                 ])
 
                 expect(r.normalize()).to.deep.equal({
@@ -148,8 +148,8 @@ describe("Models", () => {
 
             it("should normalized despair", () => {
                 const r = new PoolResult([
-                    new DieResult([DieSymbol.Failure, DieSymbol.Despair]),
-                    new DieResult([DieSymbol.Success]),
+                    new DieResult(DieKind.Challange, [DieSymbol.Failure, DieSymbol.Despair]),
+                    new DieResult(DieKind.Ability, [DieSymbol.Success]),
                 ])
 
                 expect(r.normalize()).to.deep.equal({
